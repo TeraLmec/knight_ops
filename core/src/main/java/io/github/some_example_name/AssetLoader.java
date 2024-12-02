@@ -142,6 +142,9 @@ public class AssetLoader implements Disposable {
 
         // Pap texture
         loadTexture("pap", "assets/weapons/pap/pap.png");
+
+        // Smoke texture
+        loadTexture("smoke", "assets/player/dash.png");
     }
 
     /**

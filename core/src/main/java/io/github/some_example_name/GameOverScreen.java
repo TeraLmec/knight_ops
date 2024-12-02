@@ -40,6 +40,7 @@ public class GameOverScreen {
         restartButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                System.out.println("restart button proc");
                 round.restartGame();
                 FirstScreen.setGameOver(false);
             }
@@ -48,6 +49,7 @@ public class GameOverScreen {
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Quit button proc");
                 Gdx.app.exit();
             }
         });
@@ -80,7 +82,7 @@ public class GameOverScreen {
     }
 
     public void hide() {
-        Gdx.input.setInputProcessor(null);
+        Gdx.input.setInputProcessor(round.getPlayer());
     }
 
     public void dispose() {

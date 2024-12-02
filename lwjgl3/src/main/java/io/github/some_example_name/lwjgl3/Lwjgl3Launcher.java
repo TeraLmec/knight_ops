@@ -41,6 +41,7 @@ public class Lwjgl3Launcher {
         
         // Set the application to fullscreen mode using the display's current mode
         configuration.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+        /* configuration.setWindowedMode(1000, 1000); */
         
         // Set the window icons for different resolutions
         configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");

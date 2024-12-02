@@ -16,6 +16,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import io.github.some_example_name.Hitbox;
 
 public class Ball extends Sprite {
     private float speed;
@@ -66,13 +67,7 @@ public class Ball extends Sprite {
 
     private void renderHitbox(SpriteBatch batch) {
         Rectangle hitbox = getBoundingRectangle();
-        batch.end();
-        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-        shapeRenderer.end();
-        batch.begin();
+        Hitbox.renderHitbox(batch, hitbox, Color.RED);
     }
 
     public boolean isOutOfBounds(float mapWidth, float mapHeight) {

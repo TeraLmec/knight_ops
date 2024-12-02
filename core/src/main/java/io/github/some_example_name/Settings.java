@@ -21,7 +21,7 @@ public class Settings {
     public static final float KNOCKBACK_DISTANCE = 100f;
     public static final float MIN_CURSOR_DISTANCE = 50f;
     public static final int LEVEL_STAT = 20;
-    public static final int BASE_HP = 250;
+    public static final int BASE_HP = 250000;
     public static final float BASE_SPEED = 700f;
     public static final float ATTACK_STATE_TIME = 0.1f;
     public static final float DEATH_ANIMATION_FRAME_DURATION = 0.1f;
@@ -305,4 +305,6 @@ public class Settings {
     public static final float LEVEL_TEXT_OFFSET_Y = -20;
     public static final float SCORE_TEXT_X = -250;
     public static final float SCORE_TEXT_Y = 20;
+
+    public static final boolean SHOW_HITBOXES = false;
 }

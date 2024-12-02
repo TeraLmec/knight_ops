@@ -28,6 +28,8 @@ import io.github.some_example_name.weapon.range.Vector;
 import io.github.some_example_name.weapon.range.Winchester;
 import io.github.some_example_name.XpManager;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Player extends Character implements InputProcessor {
     // Player state variables
@@ -36,7 +38,7 @@ public class Player extends Character implements InputProcessor {
     private long dashStartTime;
     private long dashDuration = Settings.DASH_DURATION;
     private int meleeDamage = Settings.MELEE_DAMAGE;
-    private boolean isDead = false;
+    private boolean dead = false;
     private long deathTime = 0;
     private boolean attacking = false;
     private float attackStateTime = Settings.ATTACK_STATE_TIME;
@@ -63,11 +65,13 @@ public class Player extends Character implements InputProcessor {
     // Animation and rendering
     private Animation<TextureRegion> meleeAnimation;
     private Animation<TextureRegion> deathAnimation; // Ajoutez cette ligne
+    private Animation<TextureRegion> smokeAnimation; // Add this line
     private ShapeRenderer shapeRenderer = new ShapeRenderer(); 
     private Rectangle meleeHitbox = new Rectangle();
     private float hitboxRotation = 0;
     private float width;
     private float height;
+    /* private List<Smoke> smokes = new ArrayList<>(); // Add this line */
 
     // Enemies
     private List<Enemy> enemies;
@@ -91,9 +95,9 @@ public class Player extends Character implements InputProcessor {
         Gdx.input.setInputProcessor(this);
         this.enemies = enemies;
         currentWeapon = primaryWeapon;
-        System.out.println("Primary weapon: " + primaryWeapon.getName());
-        this.meleeAnimation = sheetSplitter(meleeSheet, 2, Settings.ATTACK_STATE_TIME);
-        this.deathAnimation = sheetSplitter(AssetLoader.getTexture("player_death"), 4, Settings.DEATH_ANIMATION_FRAME_DURATION); // Initialisez l'animation de mort
+        this.meleeAnimation = sheetSplitter(meleeSheet, 2, 1, Settings.ATTACK_STATE_TIME);
+        this.deathAnimation = sheetSplitter(AssetLoader.getTexture("player_death"), 4, 1, Settings.DEATH_ANIMATION_FRAME_DURATION); // Initialisez l'animation de mort
+        this.smokeAnimation = sheetSplitter(AssetLoader.getTexture("smoke"), 5, 8, 0.1f); // Initialize smoke animation
         this.position = new Vector2(getX(), getY());
         this.direction = new Vector2();
         updateDimensions();
@@ -102,7 +106,6 @@ public class Player extends Character implements InputProcessor {
         this.xpManager = new XpManager(this);
         this.baseSpeed = this.speed;
         this.baseMeleeDamage = this.meleeDamage;
-        System.out.println("Initial HP: " + this.hp + ", Vitesse: " + this.speed);
     }
 
     private void updateDimensions() {
@@ -117,7 +120,6 @@ public class Player extends Character implements InputProcessor {
         // Implement attack logic
     }
 
-
     public void gainXp(int xp) {
         xpManager.addXp(xp);
     }
@@ -128,12 +130,7 @@ public class Player extends Character implements InputProcessor {
         move(delta);
         updateAnimation(delta);
         handleAttack(delta);
-        updatePlayerCenter();
-        updatePosition();
-        updateMousePosition(camera);
-        updateDirection();
-        handleWeaponSwitch();
-        updateMeleeHitbox();
+        updatePlayerState(camera);
         timeSinceLastShot += delta;
         shoot(camera);
         if (currentWeapon instanceof Bmg) {
@@ -152,11 +149,10 @@ public class Player extends Character implements InputProcessor {
 
     @Override
     public void takeDamage(int damage) {
-        if (isDead) {
+        if (dead) {
             return;
         }
         super.takeDamage(damage);
-        System.out.println("Player HP after taking damage: " + this.hp);
         checkIfDead();
     }
     
@@ -169,8 +165,8 @@ public class Player extends Character implements InputProcessor {
     
     @Override
     public void die() {
-        if (!isDead) {
-            isDead = true;
+        if (!dead) {
+            dead = true;
             deathTime = TimeUtils.millis();
             System.out.println("Player is dead");
             setStateTime(0); // Reset state time for death animation
@@ -198,6 +194,7 @@ public class Player extends Character implements InputProcessor {
         dashStartTime = TimeUtils.millis();
         dashing = true;
         dashMultiplier = 2.5f;
+        /* smokes.add(new Smoke(position.cpy())); // Add smoke at the start of the dash */
     }
 
     private void updateDashState() {
@@ -207,6 +204,7 @@ public class Player extends Character implements InputProcessor {
         } else {
             interpolateDashMultiplier(elapsedTime);
         }
+        /* updateSmokes(Gdx.graphics.getDeltaTime()); // Update smokes */
     }
 
     private void endDash() {
@@ -221,21 +219,32 @@ public class Player extends Character implements InputProcessor {
 
     private void handleAttack(float deltaTime) {
         if (Gdx.input.isButtonJustPressed(com.badlogic.gdx.Input.Buttons.RIGHT) && canAttack()) {
-            attacking = true;
-            attackStateTime = 0;
-            damageDealt = false;
-            lastMeleeAttackTime = TimeUtils.millis(); // Update the last attack time
-            if (!damageDealt) {
-                dealMeleeDamage();
-                damageDealt = true;
-            }
-            playMeleeSound();
+            startAttack();
         }
         if (attacking) {
-            attackStateTime += deltaTime;
-            if (meleeAnimation.isAnimationFinished(attackStateTime)) {
-                attacking = false;
-            }
+            updateAttackState(deltaTime);
+        }
+    }
+
+    private Vector2 attackDirection = new Vector2();
+
+    private void startAttack() {
+        attacking = true;
+        attackStateTime = 0;
+        damageDealt = false;
+        lastMeleeAttackTime = TimeUtils.millis(); // Update the last attack time
+        attackDirection.set(direction); // Store the attack direction
+        if (!damageDealt) {
+            dealMeleeDamage();
+            damageDealt = true;
+        }
+        playMeleeSound();
+    }
+
+    private void updateAttackState(float deltaTime) {
+        attackStateTime += deltaTime;
+        if (meleeAnimation.isAnimationFinished(attackStateTime)) {
+            attacking = false;
         }
     }
 
@@ -306,35 +315,49 @@ public class Player extends Character implements InputProcessor {
         position.set(playerCenter.add(direction.scl(75)));
     }
 
+    private void updatePlayerState(OrthographicCamera camera) {
+        updatePlayerCenter();
+        updatePosition();
+        updateMousePosition(camera);
+        updateDirection();
+        updateMeleeHitbox();
+    }
+
     public void render(SpriteBatch batch) {
-        if (isDead) {
-            TextureRegion currentFrame = deathAnimation.getKeyFrame(getStateTime(), false);
-            if (deathAnimation.isAnimationFinished(getStateTime()) && TimeUtils.timeSinceMillis(deathTime) > 500) {
-                FirstScreen.setGameOver(true);
-            }
-            float aspectRatio = (float) currentFrame.getRegionWidth() / currentFrame.getRegionHeight();
-            float width = getWidth() * getScale();
-            float height = width / aspectRatio;
-            batch.draw(currentFrame, getX() - width / 2, getY() - height / 2, width, height);
+        if (dead) {
+            renderDeathAnimation(batch);
         } else {
-            TextureRegion frame = getCurrentFrame();
-            if (frame != null) {
-                flipFrameIfNeeded(frame);
-            }
-            currentWeapon.render(batch);
-            super.render(batch);
-            if (attacking) {
-                renderMeleeAnimation(batch);
-                batch.end(); // End the SpriteBatch before starting ShapeRenderer
-                renderMeleeHitbox(batch.getProjectionMatrix());
-                batch.begin(); // Begin the SpriteBatch again after ShapeRenderer is done
-            }
-            if (currentWeapon instanceof Bmg) {
-                batch.end(); // End the SpriteBatch before starting ShapeRenderer
-                ((Bmg) currentWeapon).renderHitscanLine(batch.getProjectionMatrix());
-                batch.begin(); // Begin the SpriteBatch again after ShapeRenderer is done
-            }
+            renderPlayer(batch);
         }
+    }
+
+    private void renderDeathAnimation(SpriteBatch batch) {
+        TextureRegion currentFrame = deathAnimation.getKeyFrame(getStateTime(), false);
+        if (deathAnimation.isAnimationFinished(getStateTime()) && TimeUtils.timeSinceMillis(deathTime) > 500) {
+            FirstScreen.setGameOver(true);
+        }
+        float aspectRatio = (float) currentFrame.getRegionWidth() / currentFrame.getRegionHeight();
+        float width = getWidth() * getScale();
+        float height = width / aspectRatio;
+        batch.draw(currentFrame, getX() - width / 2, getY() - height / 2, width, height);
+    }
+
+    private void renderPlayer(SpriteBatch batch) {
+        flipWalkFrameIfNeeded();
+        currentWeapon.render(batch);
+        super.render(batch);
+        if (attacking) {
+            renderMeleeAnimation(batch);
+            batch.end(); // End the SpriteBatch before starting ShapeRenderer
+            renderMeleeHitbox(batch.getProjectionMatrix());
+            batch.begin(); // Begin the SpriteBatch again after ShapeRenderer is done
+        }
+        if (currentWeapon instanceof Bmg) {
+            batch.end(); // End the SpriteBatch before starting ShapeRenderer
+            ((Bmg) currentWeapon).renderHitscanLine(batch.getProjectionMatrix());
+            batch.begin(); // Begin the SpriteBatch again after ShapeRenderer is done
+        }
+        /* renderSmokes(batch); // Render smokes */
     }
 
     private void renderMeleeHitbox(Matrix4 projectionMatrix) {
@@ -345,11 +368,29 @@ public class Player extends Character implements InputProcessor {
         shapeRenderer.end();
     }
 
+  /*   private void renderSmokes(SpriteBatch batch) {
+        for (Smoke smoke : smokes) {
+            smoke.render(batch);
+        }
+    } */
+
+    private void renderMeleeAnimation(SpriteBatch batch) {
+        TextureRegion currentFrame = meleeAnimation.getKeyFrame(attackStateTime, false);
+        flipMeleeFrameIfNeeded();
+        float x = position.x - width / 2;
+        float y = position.y - (height / 2) - 20;
+        float rotation = attackDirection.angleDeg(); // Use the stored attack direction
+        batch.draw(currentFrame, x, y, width / 2, height / 2, width, height, 1, 1, rotation);
+        if (currentWeapon != null) {
+            currentWeapon.render(batch);
+        }
+    }
 
     public void shoot(OrthographicCamera camera) {
         if (Gdx.input.isButtonPressed(com.badlogic.gdx.Input.Buttons.LEFT)) {
             speedShootMultiplier = 0.4f;
-            currentWeapon.setPosition(playerCenter.add(direction.scl(0.4f)));
+            Vector2 weaponPosition = playerCenter.cpy().add(direction.scl(0.4f));
+            currentWeapon.setPosition(weaponPosition);
             if (timeSinceLastShot >= currentWeapon.getFireRate()) {
                 timeSinceLastShot = 0f;
                 currentWeapon.shoot(playerCenter, direction);
@@ -359,39 +400,33 @@ public class Player extends Character implements InputProcessor {
         }
     }
 
-    private void flipFrameIfNeeded(TextureRegion currentFrame) {
-        if ((getMoveX() < 0  && !getCurrentFrame().isFlipX()) || (getMoveX() > 0 && getCurrentFrame().isFlipX())) {
-            currentFrame.flip(true, false);
-        }
-    }
-
-    private void renderMeleeAnimation(SpriteBatch batch) {
-        TextureRegion currentFrame = meleeAnimation.getKeyFrame(attackStateTime, false);
-        if ((mousePosition.x < getX() && !currentFrame.isFlipY()) || (mousePosition.x >= getX() && currentFrame.isFlipY())) {
-            currentFrame.flip(false, true);
-        }
-        float x = position.x - width / 2;
-        float y = position.y - (height / 2) - 20;
-        float rotation = direction.angleDeg();
-        batch.draw(currentFrame, x, y, width / 2, height / 2, width, height, 1, 1, rotation);
-        if (currentWeapon != null) {
-            currentWeapon.render(batch);
-        }
-    }
-
-    public void addWeapon(Weapon newWeapon) {
-        if (secondaryWeapon == null) {
-            secondaryWeapon = newWeapon;
-            currentWeapon = secondaryWeapon;
-        } else {
-            if (currentWeapon.equals(primaryWeapon)) {
-                primaryWeapon = newWeapon;
-            } else {
-                secondaryWeapon = newWeapon;
+    private void flipWalkFrameIfNeeded() {
+        if (getMoveX() < 0) {
+            for (TextureRegion frame : walkAnimation.getKeyFrames()) {
+                if (!frame.isFlipX()) {
+                    frame.flip(true, false);
+                }
             }
-            currentWeapon = newWeapon;
+        } else if (getMoveX() > 0) {
+            for (TextureRegion frame : walkAnimation.getKeyFrames()) {
+                if (frame.isFlipX()) {
+                    frame.flip(true, false);
+                }
+            }
         }
-        System.out.println("Added weapon: " + newWeapon.getName());
+    }
+    private void flipMeleeFrameIfNeeded() {
+        for (TextureRegion frame : meleeAnimation.getKeyFrames()) {
+            if ((mousePosition.x < getX() && !frame.isFlipY()) || (mousePosition.x >= getX() && frame.isFlipY())) {
+                frame.flip(false, true);
+            }
+        }
+    }
+    
+    public void addWeapon(Weapon newWeapon) {
+        secondaryWeapon = primaryWeapon;
+        primaryWeapon = newWeapon;
+        currentWeapon = primaryWeapon;
     }
 
     public void upgradeWeapon(Weapon weapon) {
@@ -419,20 +454,100 @@ public class Player extends Character implements InputProcessor {
         }
     }
 
-    private void handleWeaponSwitch() {
-        // Implement weapon switch logic
-    }
 
     public void switchWeapon() {
         if (secondaryWeapon != null) {
             currentWeapon = (currentWeapon.equals(primaryWeapon)) ? secondaryWeapon : primaryWeapon;
-            System.out.println("Switched to " + currentWeapon.getName());
         }
     }
 
     public void incrementKillCount() {
         killCount++;
         roundKillCount++;
+    }
+
+    public void levelUp() {
+        float increasePerLevel = 1.0f / Settings.LEVEL_STAT;
+
+        if (speedIncreasePercentage < 1.0f) {
+            speedIncreasePercentage += increasePerLevel;
+            this.speed = baseSpeed * (1 + speedIncreasePercentage);
+        }
+    
+        if (meleeDamageIncreasePercentage < 1.0f) {
+            meleeDamageIncreasePercentage += increasePerLevel;
+            this.meleeDamage = (int) (baseMeleeDamage * (1 + meleeDamageIncreasePercentage));
+        }
+    
+    }
+
+  /*   private void updateSmokes(float deltaTime) {
+        Iterator<Smoke> iterator = smokes.iterator();
+        while (iterator.hasNext()) {
+            Smoke smoke = iterator.next();
+            smoke.update(deltaTime);
+            if (smoke.isFinished()) {
+                iterator.remove();
+            }
+        }
+    }
+
+    private class Smoke {
+        private Vector2 position;
+        private float stateTime;
+        private boolean finished;
+
+        public Smoke(Vector2 position) {
+            this.position = position;
+            this.stateTime = 0f;
+            this.finished = false;
+        }
+
+        public void update(float deltaTime) {
+            stateTime += deltaTime;
+            if (smokeAnimation.isAnimationFinished(stateTime)) {
+                finished = true;
+            }
+        }
+
+        public void render(SpriteBatch batch) {
+            if (!finished) {
+                TextureRegion currentFrame = smokeAnimation.getKeyFrame(stateTime, false);
+                float aspectRatio = (float) currentFrame.getRegionWidth() / currentFrame.getRegionHeight();
+                float width = 100 * aspectRatio;
+                float height = 100;
+                batch.draw(currentFrame, position.x - width / 2, position.y - height / 2, width, height);
+            }
+        }
+
+        public boolean isFinished() {
+            return finished;
+        }
+    } */
+
+    // Getter and Setter methods
+    public boolean isDead() {
+        return dead;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
+
+    public Weapon getPrimaryWeapon() {
+        return primaryWeapon;
+    }
+
+    public Weapon getSecondaryWeapon() {
+        return secondaryWeapon;
+    }
+
+    public Weapon getCurrentWeapon() {
+        return currentWeapon;
+    }
+
+    public XpManager getXpManager() {
+        return xpManager;
     }
 
     public int getKillCount() {
@@ -449,6 +564,7 @@ public class Player extends Character implements InputProcessor {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
+        System.out.println("scrolled");
         if (amountY != 0) {
             switchWeapon();
         }
@@ -500,38 +616,6 @@ public class Player extends Character implements InputProcessor {
     public void dispose() {
         meleeNormalSound.dispose();
         meleeTouchedSound.dispose();
-    }
-
-    public Weapon getPrimaryWeapon() {
-        return primaryWeapon;
-    }
-
-    public Weapon getSecondaryWeapon() {
-        return secondaryWeapon;
-    }
-
-    public Weapon getCurrentWeapon() {
-        return currentWeapon;
-    }
-
-    public XpManager getXpManager() {
-        return xpManager;
-    }
-
-    public void levelUp() {
-        float increasePerLevel = 1.0f / Settings.LEVEL_STAT;
-
-        if (speedIncreasePercentage < 1.0f) {
-            speedIncreasePercentage += increasePerLevel;
-            this.speed = baseSpeed * (1 + speedIncreasePercentage);
-        }
-    
-        if (meleeDamageIncreasePercentage < 1.0f) {
-            meleeDamageIncreasePercentage += increasePerLevel;
-            this.meleeDamage = (int) (baseMeleeDamage * (1 + meleeDamageIncreasePercentage));
-        }
-    
-        System.out.println("Niveau augmenté ! HP: " + this.hp + ", Vitesse: " + this.speed + ", Dégâts de mêlée: " + this.meleeDamage);
     }
 }
 

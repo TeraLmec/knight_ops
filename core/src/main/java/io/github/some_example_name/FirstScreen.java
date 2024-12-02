@@ -12,15 +12,9 @@ import io.github.some_example_name.weapon.spawn_weapons.WeaponManager;
 import io.github.some_example_name.menu.settings.BrightnessManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import io.github.some_example_name.character.Enemy;
-import java.util.List;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 
-/**
- * FirstScreen class that implements the Screen interface.
- * This class handles the main game screen, including rendering, updating game elements, and handling user input.
- */
 public class FirstScreen implements Screen {
     private SpriteBatch batch;
     private Player player;
@@ -30,12 +24,15 @@ public class FirstScreen implements Screen {
     private PauseMenu pauseMenu;
     private boolean isPaused;
     private static boolean gameOver = false;
-    private List<Enemy> enemies;
     private MapManager mapManager;
     private Music backgroundMusic;
     private BitmapFont font;
     private WeaponManager weaponManager;
     private GameOverScreen gameOverScreen;
+
+    public Player getPlayer() {
+        return player;
+    }
 
     @Override
     public void show() {
@@ -45,9 +42,6 @@ public class FirstScreen implements Screen {
         gameOverScreen = new GameOverScreen(batch, font, this);
     }
 
-    /**
-     * Initializes the screen elements.
-     */
     private void initialize() {
         batch = new SpriteBatch();
         pauseMenu = new PauseMenu(() -> isPaused = false, this::restartGame, this::openSettings, Gdx.app::exit);
@@ -57,8 +51,6 @@ public class FirstScreen implements Screen {
         backgroundMusic.play();
         font = new BitmapFont();
         font.getData().setScale(Settings.FONT_SCALE);
-
-        // Set the callback for resuming music
         pauseMenu.getSettingsMenu().setOnResolutionChange(() -> {
             if (!isPaused) {
                 backgroundMusic.play();
@@ -66,42 +58,37 @@ public class FirstScreen implements Screen {
         });
     }
 
-    /**
-     * Sets up the game elements such as map, player, enemies, and weapon manager.
-     */
     private void setupGameElements() {
         mapManager = new MapManager();
         mapManager.loadMap();
-
         spawnManager = new Spawn(mapManager.getTiledMap(), mapManager.getUnitScale());
         player = spawnManager.getPlayer();
-        enemies = spawnManager.getEnemies();
-
         weaponManager = new WeaponManager(mapManager.getTiledMap(), player, mapManager.getUnitScale());
-
         borderThickness = mapManager.getBorderThickness();
-
         cameraManager = new CameraManager(MapManager.getTiledMapWidth(), MapManager.getTiledMapHeight());
         cameraManager.updatePosition(new Vector2(player.getX(), player.getY()));
-
-        // Start the countdown for round 1
         spawnManager.update(0);
     }
 
-    /**
-     * Restarts the game by reinitializing game elements and resetting the game state.
-     */
     public void restartGame() {
         setupGameElements();
+        resetPlayerValues();
         isPaused = false;
         gameOver = false;
         backgroundMusic.stop();
         backgroundMusic.play();
+        Gdx.input.setCursorCatched(true);
     }
 
-    /**
-     * Opens the settings menu.
-     */
+    private void resetPlayerValues() {
+        player.setHp(Settings.BASE_HP);
+        player.setSpeed(Settings.BASE_SPEED);
+        player.setDead(false);
+        player.resetRoundKillCount();
+        ScoreManager.getInstance().reset();
+        // Reset other player-related values if needed
+    }
+
     private void openSettings() {
         pauseMenu.hide();
         pauseMenu.getSettingsMenu().show();
@@ -110,34 +97,28 @@ public class FirstScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0f, 0f, 0f, 1f);
-
         if (gameOver) {
-            Gdx.input.setCursorCatched(false);
+            gameOverScreen.show();
             gameOverScreen.render(delta);
             return;
+        } else {
+            gameOverScreen.hide();
         }
-
         handlePause();
-
         if (isPaused) {
             renderPauseMenu();
             return;
         }
-
         updateGameElements(delta);
         renderGameElements();
     }
 
-    /**
-     * Renders the game elements.
-     */
     public void renderGameElements() {
         batch.setShader(BrightnessManager.getShaderProgram());
         batch.begin();
         BrightnessManager.getShaderProgram().setUniformf("u_brightness", BrightnessManager.getBrightness());
         mapManager.render(cameraManager.getCamera());
         batch.setProjectionMatrix(cameraManager.getCamera().combined);
-
         spawnManager.render(batch);
         weaponManager.render(batch);
         player.render(batch);
@@ -151,9 +132,6 @@ public class FirstScreen implements Screen {
         batch.setShader(null);
     }
 
-    /**
-     * Updates the score display.
-     */
     private void updateScore() {
         int currentScore = ScoreManager.getInstance().getScore();
         Vector3 screenCoords = new Vector3(Gdx.graphics.getWidth() + Settings.SCORE_TEXT_X, Settings.SCORE_TEXT_Y, 0);
@@ -161,25 +139,18 @@ public class FirstScreen implements Screen {
         font.draw(batch, "Points: " + currentScore, worldCoords.x, worldCoords.y);
     }
 
-    /**
-     * Updates the XP bar display.
-     */
     private void updateXp() {
         int currentXp = player.getXpManager().getCurrentXp();
         int xpToNextLevel = player.getXpManager().getXpToNextLevel();
         int currentLevel = player.getXpManager().getLevel();
-        
         Vector3 screenCoords = new Vector3(Settings.XP_BAR_X, Settings.XP_BAR_Y, 0);
         Vector3 worldCoords = cameraManager.getCamera().unproject(screenCoords);
-    
         float barWidth = Settings.XP_BAR_WIDTH;
         float barHeight = Settings.XP_BAR_HEIGHT;
         float barX = worldCoords.x;
         float barY = worldCoords.y;
-    
         float xpPercentage = (float) currentXp / xpToNextLevel;
         float xpBarWidth = barWidth * xpPercentage;
-    
         batch.end();
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cameraManager.getCamera().combined);
@@ -190,13 +161,9 @@ public class FirstScreen implements Screen {
         shapeRenderer.rect(barX, barY, xpBarWidth, barHeight);
         shapeRenderer.end();
         batch.begin();
-    
         font.draw(batch, "Level: " + currentLevel, barX + barWidth / 2 + Settings.LEVEL_TEXT_OFFSET_X, barY + barHeight / 2 + Settings.LEVEL_TEXT_OFFSET_Y);
     }
 
-    /**
-     * Handles the pause functionality.
-     */
     private void handlePause() {
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
             if (pauseMenu.getSettingsMenu().isVisible()) {
@@ -215,19 +182,12 @@ public class FirstScreen implements Screen {
         }
     }
 
-    /**
-     * Renders the pause menu.
-     */
     private void renderPauseMenu() {
         batch.begin();
         pauseMenu.render(batch);
         batch.end();
     }
 
-    /**
-     * Updates the game elements.
-     * @param delta time elapsed since the last frame
-     */
     private void updateGameElements(float delta) {
         cameraManager.updatePosition(new Vector2(player.getX(), player.getY()));
         player.update(delta, cameraManager.getCamera());
@@ -235,9 +195,6 @@ public class FirstScreen implements Screen {
         weaponManager.update(delta, cameraManager.getCamera());
     }
 
-    /**
-     * Updates the round information display.
-     */
     private void updateRoundInfo() {
         String roundInfo = "Round: " + spawnManager.getCurrentRound();
         if (!spawnManager.isRoundInProgress()) {
@@ -248,18 +205,12 @@ public class FirstScreen implements Screen {
         font.draw(batch, roundInfo, worldCoords.x, worldCoords.y);
     }
 
-    /**
-     * Renders the custom cursor.
-     */
     private void renderCustomCursor() {
         Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         cameraManager.unproject(mousePosition);
         batch.draw(AssetLoader.getTexture("custom_cursor"), mousePosition.x - AssetLoader.getTexture("custom_cursor").getWidth() / 2, mousePosition.y - AssetLoader.getTexture("custom_cursor").getHeight() / 2);
     }
 
-    /**
-     * Updates the kill count display.
-     */
     private void updateKillCount() {
         String killCountText = "Kills: " + player.getKillCount();
         Vector3 screenCoords = new Vector3(50, Gdx.graphics.getHeight() - 50, 0);
@@ -267,9 +218,6 @@ public class FirstScreen implements Screen {
         font.draw(batch, killCountText, worldCoords.x, worldCoords.y);
     }
 
-    /**
-     * Updates the remaining enemies count display.
-     */
     private void updateRemainingEnemies() {
         String remainingEnemiesText = "Remaining Enemies: " + (spawnManager.getTotalEnemiesToSpawn() - player.getRoundKillCount());
         Vector3 screenCoords = new Vector3(50, Gdx.graphics.getHeight() - 100, 0);

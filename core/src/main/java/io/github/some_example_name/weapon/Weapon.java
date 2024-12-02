@@ -110,7 +110,7 @@ public abstract class Weapon extends Sprite {
         position.set(playerCenter.add(direction.scl(75)));
     }
 
-    private void updateBalls(float delta) {
+    public void updateBalls(float delta) {
         Iterator<Ball> iterator = balls.iterator();
         while (iterator.hasNext()) {
             Ball ball = iterator.next();
@@ -161,13 +161,6 @@ public abstract class Weapon extends Sprite {
         if ((mousePosition.x < player.getX() && !frame.isFlipY()) || (mousePosition.x >= player.getX() && frame.isFlipY())) {
             frame.flip(false, true);
         }
-    }
-
-    private Vector2 calculateBallSpawnPosition() {
-        float rotation = direction.angleRad();
-        float offsetX = (float) Math.cos(rotation) * 50;
-        float offsetY = (float) Math.sin(rotation) * 50 - 20;
-        return new Vector2(playerCenter.x + offsetX, playerCenter.y + offsetY);
     }
 
     private Vector2 calculateBallSpawnPosition(Vector2 playerCenter, Vector2 direction) {

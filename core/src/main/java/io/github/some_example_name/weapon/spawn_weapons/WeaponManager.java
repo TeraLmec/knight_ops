@@ -64,24 +64,19 @@ public class WeaponManager {
                 Weapon weapon = null;
                 switch (name.toLowerCase()) {
                     case "ar":
-                        weapon = new Ar(player, null); // Pass null for enemies for now
-                        weapon.setTexture(AssetLoader.getTexture("ar_normal"));
+                        weapon = new Ar(player, null);
                         break;
                     case "bmg":
-                        weapon = new Bmg(player, null); // Pass null for enemies for now
-                        weapon.setTexture(AssetLoader.getTexture("bmg_normal"));
+                        weapon = new Bmg(player, null);
                         break;
                     case "mauser":
-                        weapon = new Mauser(player, null); // Pass null for enemies for now
-                        weapon.setTexture(AssetLoader.getTexture("mauser_normal"));
+                        weapon = new Mauser(player, null);
                         break;
                     case "vector":
-                        weapon = new Vector(player, null); // Pass null for enemies for now
-                        weapon.setTexture(AssetLoader.getTexture("vector_normal"));
+                        weapon = new Vector(player, null);
                         break;
                     case "winchester":
-                        weapon = new Winchester(player, null); // Pass null for enemies for now
-                        weapon.setTexture(AssetLoader.getTexture("winchester_normal"));
+                        weapon = new Winchester(player, null);
                         break;
                     default:
                         throw new IllegalArgumentException("Unknown weapon: " + name);
@@ -179,7 +174,8 @@ public class WeaponManager {
                     int weaponCost = 100; // Example cost
                     if (ScoreManager.getInstance().getScore() >= weaponCost) {
                         ScoreManager.getInstance().addPoints(-weaponCost);
-                        player.addWeapon(weapon); // Add the weapon to the player
+                        Weapon newWeapon = createWeaponInstance(weapon); // Create a new instance of the weapon
+                        player.addWeapon(newWeapon); // Add the new weapon to the player
                         isBuying = false;
                         weaponToBuy = null;
                     } else {
@@ -193,6 +189,22 @@ public class WeaponManager {
                 }
                 break;
             }
+        }
+    }
+
+    private Weapon createWeaponInstance(Weapon weapon) {
+        if (weapon instanceof Ar) {
+            return new Ar(player, null);
+        } else if (weapon instanceof Bmg) {
+            return new Bmg(player, null);
+        } else if (weapon instanceof Mauser) {
+            return new Mauser(player, null);
+        } else if (weapon instanceof Vector) {
+            return new Vector(player, null);
+        } else if (weapon instanceof Winchester) {
+            return new Winchester(player, null);
+        } else {
+            throw new IllegalArgumentException("Unknown weapon type: " + weapon.getClass().getSimpleName());
         }
     }
 
@@ -219,7 +231,6 @@ public class WeaponManager {
         if (papTexture == null) {
             System.out.println("Pap texture not found for weapon: " + weaponName);
         } else {
-            System.out.println("Pap texture found for weapon: " + weaponName);
             weapon.setTexture(papTexture);
         }
 

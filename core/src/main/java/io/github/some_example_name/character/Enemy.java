@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import io.github.some_example_name.Hitbox;
 
 public abstract class Enemy extends Character {
     private int dmg;
@@ -59,9 +60,9 @@ public abstract class Enemy extends Character {
         this.dmg = dmg;
         this.player = player;
         this.attackCooldown = attackCooldown;
-        this.attackAnimation = sheetSplitter(attackTexture, attackFrameCols, 0.1f);
-        this.hurtAnimation = sheetSplitter(hurtTexture, hurtFrameCols, 0.1f);
-        this.deathAnimation = sheetSplitter(deathTexture, deathFrameCols, 0.1f);
+        this.attackAnimation = sheetSplitter(attackTexture, attackFrameCols, 1, 0.1f);
+        this.hurtAnimation = sheetSplitter(hurtTexture, hurtFrameCols, 1, 0.1f);
+        this.deathAnimation = sheetSplitter(deathTexture, deathFrameCols, 1, 0.1f);
         this.originalSpeed = getSpeed();
         this.points = points;
         this.range = range;
@@ -231,13 +232,7 @@ public abstract class Enemy extends Character {
 
     private void renderHitbox(SpriteBatch batch) {
         Rectangle hitbox = getBoundingRectangle();
-        batch.end();
-        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.BLUE);
-        shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-        shapeRenderer.end();
-        batch.begin();
+        Hitbox.renderHitbox(batch, hitbox, Color.BLUE);
     }
 
     // Getter and Setter methods

@@ -19,5 +19,6 @@ public class Main extends Game {
         
         // Set the initial screen to StartScreen
         setScreen(new StartScreen(this));
+        /* setScreen(new FirstScreen()); */
     }
 }
