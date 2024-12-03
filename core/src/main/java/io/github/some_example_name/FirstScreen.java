@@ -6,8 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.TimeUtils;
-
 import io.github.some_example_name.character.Player;
 import io.github.some_example_name.menu.PauseMenu;
 import io.github.some_example_name.weapon.spawn_weapons.WeaponManager;
@@ -16,10 +14,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-
-import io.github.some_example_name.AssetLoader;
-import io.github.some_example_name.CustomCursor;
 
 public class FirstScreen implements Screen {
     private SpriteBatch batch;
@@ -53,15 +47,13 @@ public class FirstScreen implements Screen {
         batch = new SpriteBatch();
         pauseMenu = new PauseMenu(() -> isPaused = false, this::restartGame, this::openSettings, Gdx.app::exit, this);
         Gdx.input.setCursorCatched(true);
-        backgroundMusic = AssetLoader.getMusic("background_music");
+        backgroundMusic = AssetLoader.getMusic("combat_music");
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
         font = new BitmapFont();
         font.getData().setScale(Settings.FONT_SCALE);
         pauseMenu.getSettingsMenu().setOnResolutionChange(() -> {
-            if (!isPaused) {
-                backgroundMusic.play();
-            }
+            
         });
         customCursor = new CustomCursor("custom_cursor");
     }
@@ -198,6 +190,11 @@ public class FirstScreen implements Screen {
         player.update(delta, cameraManager.getCamera());
         spawnManager.update(delta);
         weaponManager.update(delta, cameraManager.getCamera());
+        if (!isPaused) {
+            backgroundMusic.play();
+        } else {
+            backgroundMusic.stop();
+        }
     }
 
     private void updateRoundInfo() {

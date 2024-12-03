@@ -105,6 +105,7 @@ public class PauseMenu {
 
     public void hide() {
         setVisible(false);
+        Gdx.input.setCursorCatched(true);
         Gdx.input.setInputProcessor(round.getPlayer());
     }
 

@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import io.github.some_example_name.Hitbox;
 import io.github.some_example_name.AssetLoader;
+import java.util.Random;
 
 public class Ball extends Sprite {
     private float speed;
@@ -27,6 +28,7 @@ public class Ball extends Sprite {
     private static ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Sound hitSound;
     private float volume = 0.4f;
+    private Random random = new Random();
     
     public Ball(Texture ballTexture, Vector2 startPosition, Vector2 direction, Texture explosionTexture, int explosionFrameCols, int explosionFrameRows, float speed, float scale) {
         super(ballTexture);
@@ -106,7 +108,8 @@ public class Ball extends Sprite {
                 ballIterator.remove();
                 enemy.takeDamage(damage); // Use existing method to reduce enemy health
                 explosions.add(new Explosion(getPosition(), getExplosionAnimation())); // Add explosion
-                hitSound.play(volume);
+                float pitch = 0.8f + random.nextFloat() * 0.4f;
+                hitSound.play(volume, pitch, 0);
                 break;
             }
         }

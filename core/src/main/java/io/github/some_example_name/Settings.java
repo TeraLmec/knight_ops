@@ -290,7 +290,6 @@ public class Settings {
     }
 
     // FirstScreen constants
-    public static final String BACKGROUND_MUSIC_PATH = "assets/sounds/game/blindpick.mp3";
     public static final float FONT_SCALE = 2.5f;
     public static final float XP_BAR_WIDTH = 700;
     public static final float XP_BAR_HEIGHT = 30;

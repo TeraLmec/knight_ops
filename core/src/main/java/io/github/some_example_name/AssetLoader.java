@@ -198,6 +198,7 @@ public class AssetLoader implements Disposable {
      */
     private static void loadMusic() {
         loadMusic("background_music", "assets/sounds/start_menu/from_past_to_present.mp3");
+        loadMusic("combat_music", "assets/sounds/game/blindpick.mp3");
     }
 
     /**

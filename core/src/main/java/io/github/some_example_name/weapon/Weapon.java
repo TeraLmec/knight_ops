@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import io.github.some_example_name.character.Enemy;
 import io.github.some_example_name.AssetLoader;
+import java.util.Random;
 
 public abstract class Weapon extends Sprite {
     private Player player;
@@ -47,6 +48,7 @@ public abstract class Weapon extends Sprite {
     private float volume;
     private float ballSpeed;
     private boolean pap = false;
+    private Random random = new Random();
 
     public Weapon(Player player, List<Enemy> enemies, String name, Texture spriteTexture, int damage, float fireRate, float ballSpeed, String shootSoundKey) {
         super(spriteTexture);
@@ -189,7 +191,8 @@ public abstract class Weapon extends Sprite {
         } else {
             handleNormalShoot(playerCenter, direction);
         }
-        shootSound.play(volume);
+        float pitch = 0.8f + random.nextFloat() * 0.4f;
+        shootSound.play(volume, pitch, 0);
     }
 
     private void handlePapShoot(Vector2 playerCenter, Vector2 direction) {

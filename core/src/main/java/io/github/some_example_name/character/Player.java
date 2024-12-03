@@ -31,6 +31,7 @@ import io.github.some_example_name.XpManager;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 public class Player extends Character implements InputProcessor {
     // Player state variables
@@ -90,6 +91,7 @@ public class Player extends Character implements InputProcessor {
 
     private float speedIncreasePercentage = 0;
     private float meleeDamageIncreasePercentage = 0;
+    private Random random = new Random();
 
     public Player(Texture walkSheet, Texture meleeSheet, float x, float y, List<Enemy> enemies) {
         super(8, x, y, Settings.BASE_HP, Settings.BASE_SPEED, walkSheet);
@@ -277,10 +279,11 @@ public class Player extends Character implements InputProcessor {
     }
 
     private void playMeleeSound() {
+        float pitch = 0.8f + random.nextFloat() * 0.4f;
         if (meleeTouched) {
-            meleeTouchedSound.play(0.4f);
+            meleeTouchedSound.play(0.4f, pitch, 0);
         } else {
-            meleeNormalSound.play(0.4f);
+            meleeNormalSound.play(0.4f, pitch, 0);
         }
         meleeTouched = false;
     }
