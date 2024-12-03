@@ -15,12 +15,12 @@ public class Vector extends Weapon {
               (int) Settings.WEAPON_STATS.get("vector").get("damage"), 
               (float) Settings.WEAPON_STATS.get("vector").get("fireRate"), 
               (float) Settings.WEAPON_STATS.get("vector").get("ballSpeed"),
-              (String) Settings.WEAPON_STATS.get("vector").get("rifle_shot")
+              "rifle_shot"
         );
     }
 
     @Override
-    protected String getPapShootSoundPath() {
-        return (String) Settings.WEAPON_STATS.get("vector_pap").get("rifle_shot");
+    protected String getPapShootSoundKey() {
+        return "vector_pap_rifle_shot";
     }
 }

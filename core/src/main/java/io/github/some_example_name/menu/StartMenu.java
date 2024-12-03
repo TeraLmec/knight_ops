@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import io.github.some_example_name.AssetLoader;
 
 public class StartMenu {
     private Stage stage;
@@ -24,10 +25,10 @@ public class StartMenu {
         this.onQuitGame = onQuitGame;
 
         stage = new Stage(new ScreenViewport());
-        Skin skin = new Skin(Gdx.files.internal("assets/skin/tracer-ui.json"));
+        Skin skin = new Skin(Gdx.files.internal("assets/skin/tracer-ui.json")); // Change this line
 
         // Load the button click sound
-        buttonClickSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/start_menu/clickButton.mp3"));
+        buttonClickSound = AssetLoader.getSound("button_click");
 
         Table table = new Table();
         table.setFillParent(true);

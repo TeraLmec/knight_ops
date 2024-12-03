@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import io.github.some_example_name.FirstScreen;
 import io.github.some_example_name.menu.settings.SettingsMenu;
+import io.github.some_example_name.AssetLoader;
 
 public class StartScreen implements Screen {
     private final Game game;
@@ -26,12 +27,12 @@ public class StartScreen implements Screen {
             settingsMenu = new SettingsMenu(null, startMenu);
 
             // Load and play the soundtrack
-            soundtrack = Gdx.audio.newMusic(Gdx.files.internal("assets/sounds/start_menu/from_past_to_present.mp3"));
+            soundtrack = AssetLoader.getMusic("background_music");
             soundtrack.setLooping(true);
             soundtrack.play();
 
             // Load the background texture
-            backgroundTexture = new Texture(Gdx.files.internal("assets/font/affiche.png"));
+            backgroundTexture = AssetLoader.getTexture("background"); // Ensure this line is correct
 
             // Show the start menu
             startMenu.show();

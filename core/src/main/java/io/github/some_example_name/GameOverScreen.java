@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.github.some_example_name.FirstScreen;
 import com.badlogic.gdx.utils.TimeUtils;
+import io.github.some_example_name.AssetLoader;
 
 public class GameOverScreen {
     private final Stage stage;
@@ -30,7 +31,6 @@ public class GameOverScreen {
         this.stage = new Stage(new ScreenViewport());
         this.font = new BitmapFont();
         font.getData().setScale(4.0f);
-        Gdx.input.setInputProcessor(stage);
 
         Skin skin = new Skin(Gdx.files.internal("assets/skin/tracer-ui.json"));
 

@@ -35,7 +35,7 @@ public class Settings {
     public static final int TILE_HEIGHT = 16;
     public static final int MAP_WIDTH_IN_TILES = 50;
     public static final int MAP_HEIGHT_IN_TILES = 50;
-    public static final String MAP_PATH = "assets/Map/dungeon.tmx";
+    public static final String MAP_PATH = "assets/map/dungeon.tmx";
     public static final float UNIT_SCALE = 6.0f;
 
     // Enemy stats map
@@ -210,7 +210,6 @@ public class Settings {
         mauserStats.put("damage", 30);
         mauserStats.put("fireRate", 0.275f);
         mauserStats.put("ballSpeed", 3500f);
-        mauserStats.put("pistol_shot", "assets/sounds/pistol_shot.mp3");
         WEAPON_STATS.put("mauser", mauserStats);
 
         // Winchester stats
@@ -220,7 +219,6 @@ public class Settings {
         winchesterStats.put("damage", 40);
         winchesterStats.put("fireRate", 1.3f);
         winchesterStats.put("ballSpeed", 3500f);
-        winchesterStats.put("shotgun_shot", "assets/sounds/shotgun_shot.mp3");
         WEAPON_STATS.put("winchester", winchesterStats);
 
         // Vector stats
@@ -230,7 +228,6 @@ public class Settings {
         vectorStats.put("damage", 15);
         vectorStats.put("fireRate", 0.1f);
         vectorStats.put("ballSpeed", 5500f);
-        vectorStats.put("rifle_shot", "assets/sounds/rifle_shot.mp3");
         WEAPON_STATS.put("vector", vectorStats);
 
         // BMG stats
@@ -239,7 +236,6 @@ public class Settings {
         bmgStats.put("texture", AssetLoader.getTexture("bmg_normal"));
         bmgStats.put("damage", 150);
         bmgStats.put("fireRate", 2f);
-        bmgStats.put("sniper_shot", "assets/sounds/sniper_shot.mp3");
         WEAPON_STATS.put("bmg", bmgStats);
 
         // AR stats
@@ -249,7 +245,6 @@ public class Settings {
         arStats.put("damage", 32);
         arStats.put("fireRate", 0.35f);
         arStats.put("ballSpeed", 6000f);
-        arStats.put("rifle_shot", "assets/sounds/rifle_shot.mp3");
         WEAPON_STATS.put("ar", arStats);
 
         // Upgraded weapons
@@ -307,4 +302,5 @@ public class Settings {
     public static final float SCORE_TEXT_Y = 20;
 
     public static final boolean SHOW_HITBOXES = false;
+    public static final boolean SHOW_MELEE_HITBOX = false;
 }

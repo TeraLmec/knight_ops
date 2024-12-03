@@ -15,12 +15,12 @@ public class Winchester extends Weapon {
               (int) Settings.WEAPON_STATS.get("winchester").get("damage"), 
               (float) Settings.WEAPON_STATS.get("winchester").get("fireRate"), 
               (float) Settings.WEAPON_STATS.get("winchester").get("ballSpeed"),
-              (String) Settings.WEAPON_STATS.get("winchester").get("shotgun_shot")
+              "shotgun_shot"
         );
     }
 
     @Override
-    protected String getPapShootSoundPath() {
-        return (String) Settings.WEAPON_STATS.get("winchester_pap").get("shotgun_shot");
+    protected String getPapShootSoundKey() {
+        return "winchester_pap_shotgun_shot";
     }
 }

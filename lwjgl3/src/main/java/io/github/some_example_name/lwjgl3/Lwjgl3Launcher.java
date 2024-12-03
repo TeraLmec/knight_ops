@@ -29,23 +29,23 @@ public class Lwjgl3Launcher {
      */
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
-        
+
         // Set the title of the application window
         configuration.setTitle("rogue_project");
-        
+
         // Enable VSync to synchronize the frame rate with the monitor's refresh rate
         configuration.useVsync(true);
-        
+
         // Set the foreground FPS slightly higher than the display's refresh rate
         configuration.setForegroundFPS(Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate + 1);
-        
+
         // Set the application to fullscreen mode using the display's current mode
         configuration.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
-        /* configuration.setWindowedMode(1000, 1000); */
-        
+        /* configuration.setWindowedMode(2000, 2000);*/
+
         // Set the window icons for different resolutions
         configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
-        
+
         return configuration;
     }
 }

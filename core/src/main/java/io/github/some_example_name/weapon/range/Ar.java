@@ -16,12 +16,12 @@ public class Ar extends Weapon {
               (int) Settings.WEAPON_STATS.get("ar").get("damage"), 
               (float) Settings.WEAPON_STATS.get("ar").get("fireRate"), 
               (float) Settings.WEAPON_STATS.get("ar").get("ballSpeed"),
-              (String) Settings.WEAPON_STATS.get("ar").get("rifle_shot")
+              "rifle_shot"
         );
     }
 
     @Override
-    protected String getPapShootSoundPath() {
-        return (String) Settings.WEAPON_STATS.get("ar_pap").get("rifle_shot");
+    protected String getPapShootSoundKey() {
+        return "ar_pap_rifle_shot";
     }
 }

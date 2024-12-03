@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import io.github.some_example_name.Hitbox;
+import io.github.some_example_name.AssetLoader;
 
 public class Ball extends Sprite {
     private float speed;
@@ -33,7 +34,7 @@ public class Ball extends Sprite {
         this.direction = new Vector2(direction).nor();
         this.explosionAnimation = createAnimation(explosionTexture, explosionFrameCols, explosionFrameRows, 0.05f);
         this.speed = speed;
-        this.hitSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hit_marker1.mp3"));
+        this.hitSound = AssetLoader.getSound("hit_marker"); // Change this line
         setScale(scale); // Set the scale of the ball
     }
     

@@ -8,7 +8,6 @@ import java.util.List;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -28,7 +27,7 @@ public class Bmg extends Weapon {
               (Texture) Settings.WEAPON_STATS.get("bmg").get("texture"), 
               (int) Settings.WEAPON_STATS.get("bmg").get("damage"), 
               (float) Settings.WEAPON_STATS.get("bmg").get("fireRate"), 5000f,
-              (String) Settings.WEAPON_STATS.get("bmg").get("sniper_shot")
+              "sniper_shot"
         );
     }
 
@@ -54,8 +53,8 @@ public class Bmg extends Weapon {
     }
 
     @Override
-    protected String getPapShootSoundPath() {
-        return (String) Settings.WEAPON_STATS.get("bmg_pap").get("sniper_shot");
+    protected String getPapShootSoundKey() {
+        return "bmg_pap_sniper_shot"; // Change this line
     }
 
     public void updateHitscan(float delta) {

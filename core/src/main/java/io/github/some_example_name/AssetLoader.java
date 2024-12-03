@@ -1,6 +1,8 @@
 package io.github.some_example_name;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -12,12 +14,16 @@ import java.util.Map;
  */
 public class AssetLoader implements Disposable {
     private static final Map<String, Texture> textures = new HashMap<>();
+    private static final Map<String, Sound> sounds = new HashMap<>();
+    private static final Map<String, Music> music = new HashMap<>();
 
     /**
      * Loads all game assets.
      */
     public static void load() {
         loadTextures();
+        loadSounds();
+        loadMusic();
     }
 
     /**
@@ -40,10 +46,10 @@ public class AssetLoader implements Disposable {
         loadTexture("player_death", "assets/player/player_death.png");
 
         // Werebear textures
-        loadTexture("werebear_walk", "assets/enemies/bosses/werebear/walk.png");
-        loadTexture("werebear_attack", "assets/enemies/bosses/werebear/attack.png");
-        loadTexture("werebear_hurt", "assets/enemies/bosses/werebear/hurt.png");
-        loadTexture("werebear_death", "assets/enemies/bosses/werebear/death.png");
+        loadTexture("werebear_walk", "assets/enemies/bosses/wereBear/walk.png");
+        loadTexture("werebear_attack", "assets/enemies/bosses/wereBear/attack.png");
+        loadTexture("werebear_hurt", "assets/enemies/bosses/wereBear/hurt.png");
+        loadTexture("werebear_death", "assets/enemies/bosses/wereBear/death.png");
 
         // Armored Orc textures
         loadTexture("armored_orc_walk", "assets/enemies/armoredOrc/walk.png");
@@ -145,6 +151,53 @@ public class AssetLoader implements Disposable {
 
         // Smoke texture
         loadTexture("smoke", "assets/player/dash.png");
+
+        // Background texture
+        loadTexture("background", "assets/font/affiche.png");
+    }
+
+    /**
+     * Loads a sound and stores it in the sounds map.
+     * @param key the key to associate with the sound
+     * @param path the path to the sound file
+     */
+    private static void loadSound(String key, String path) {
+        sounds.put(key, Gdx.audio.newSound(Gdx.files.internal(path)));
+    }
+
+    /**
+     * Loads all sounds used in the game.
+     */
+    private static void loadSounds() {
+        loadSound("melee_normal", "assets/sounds/melee_normal_sound.mp3");
+        loadSound("melee_touched", "assets/sounds/melee_touched_sound.mp3");
+        loadSound("hit_marker", "assets/sounds/hit_marker1.mp3");
+        loadSound("button_click", "assets/sounds/start_menu/clickButton.mp3");
+        loadSound("pistol_shot", "assets/sounds/pistol_shot.mp3");
+        loadSound("shotgun_shot", "assets/sounds/shotgun_shot.mp3");
+        loadSound("rifle_shot", "assets/sounds/rifle_shot.mp3");
+        loadSound("sniper_shot", "assets/sounds/sniper_shot.mp3");
+        loadSound("mauser_pap_pistol_shot", "assets/sounds/pistol_shot.mp3");
+        loadSound("winchester_pap_shotgun_shot", "assets/sounds/shotgun_shot.mp3");
+        loadSound("bmg_pap_sniper_shot", "assets/sounds/sniper_shot.mp3");
+        loadSound("ar_pap_rifle_shot", "assets/sounds/rifle_shot.mp3");
+        loadSound("vector_pap_rifle_shot", "assets/sounds/rifle_shot.mp3");
+    }
+
+    /**
+     * Loads a music and stores it in the music map.
+     * @param key the key to associate with the music
+     * @param path the path to the music file
+     */
+    private static void loadMusic(String key, String path) {
+        music.put(key, Gdx.audio.newMusic(Gdx.files.internal(path)));
+    }
+
+    /**
+     * Loads all music used in the game.
+     */
+    private static void loadMusic() {
+        loadMusic("background_music", "assets/sounds/start_menu/from_past_to_present.mp3");
     }
 
     /**
@@ -161,7 +214,25 @@ public class AssetLoader implements Disposable {
     }
 
     /**
-     * Disposes of all loaded textures.
+     * Retrieves a sound by its name.
+     * @param name the name of the sound
+     * @return the sound associated with the name, or null if not found
+     */
+    public static Sound getSound(String name) {
+        return sounds.get(name);
+    }
+
+    /**
+     * Retrieves a music by its name.
+     * @param name the name of the music
+     * @return the music associated with the name, or null if not found
+     */
+    public static Music getMusic(String name) {
+        return music.get(name);
+    }
+
+    /**
+     * Disposes of all loaded assets.
      */
     @Override
     public void dispose() {
@@ -169,5 +240,13 @@ public class AssetLoader implements Disposable {
             texture.dispose();
         }
         textures.clear();
+        for (Sound sound : sounds.values()) {
+            sound.dispose();
+        }
+        sounds.clear();
+        for (Music music : music.values()) {
+            music.dispose();
+        }
+        music.clear();
     }
 }

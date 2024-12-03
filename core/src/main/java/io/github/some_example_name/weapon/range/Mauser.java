@@ -16,12 +16,12 @@ public class Mauser extends Weapon {
               (int) Settings.WEAPON_STATS.get("mauser").get("damage"), 
               (float) Settings.WEAPON_STATS.get("mauser").get("fireRate"), 
               (float) Settings.WEAPON_STATS.get("mauser").get("ballSpeed"),
-              (String) Settings.WEAPON_STATS.get("mauser").get("pistol_shot")
+              "pistol_shot"
         );
     }
 
     @Override
-    protected String getPapShootSoundPath() {
-        return (String) Settings.WEAPON_STATS.get("mauser_pap").get("pistol_shot");
+    protected String getPapShootSoundKey() {
+        return "mauser_pap_pistol_shot";
     }
 }

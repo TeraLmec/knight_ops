@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.some_example_name.menu.settings.SettingsMenu;
+import io.github.some_example_name.AssetLoader;
+import io.github.some_example_name.FirstScreen;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -17,10 +19,13 @@ public class PauseMenu {
     private Stage stage;
     private boolean isVisible;
     private SettingsMenu settingsMenu;
+    private final FirstScreen round;
 
-    public PauseMenu(Runnable onResume, Runnable onRestart, Runnable onOpenSettings, Runnable onQuitGame) {
+    public PauseMenu(Runnable onResume, Runnable onRestart, Runnable onOpenSettings, Runnable onQuitGame, FirstScreen round) {
         stage = new Stage(new ScreenViewport());
-        Skin skin = new Skin(Gdx.files.internal("assets/skin/tracer-ui.json"));
+        this.round = round;
+        this.stage = new Stage(new ScreenViewport());
+        Skin skin = new Skin(Gdx.files.internal("assets/skin/tracer-ui.json")); // Change this line
         settingsMenu = new SettingsMenu(this, null);
 
         TextButton resumeButton = new TextButton("Reprendre la partie", skin);
@@ -32,6 +37,7 @@ public class PauseMenu {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 setVisible(false);
+                Gdx.input.setCursorCatched(true);
                 if (onResume != null) {
                     onResume.run();
                 }
@@ -94,10 +100,12 @@ public class PauseMenu {
 
     public void show() {
         setVisible(true);
+        Gdx.input.setInputProcessor(stage);
     }
 
     public void hide() {
         setVisible(false);
+        Gdx.input.setInputProcessor(round.getPlayer());
     }
 
     public boolean isVisible() {

@@ -6,6 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.TimeUtils;
+
 import io.github.some_example_name.character.Player;
 import io.github.some_example_name.menu.PauseMenu;
 import io.github.some_example_name.weapon.spawn_weapons.WeaponManager;
@@ -14,6 +16,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+
+import io.github.some_example_name.AssetLoader;
+import io.github.some_example_name.CustomCursor;
 
 public class FirstScreen implements Screen {
     private SpriteBatch batch;
@@ -29,6 +35,7 @@ public class FirstScreen implements Screen {
     private BitmapFont font;
     private WeaponManager weaponManager;
     private GameOverScreen gameOverScreen;
+    private CustomCursor customCursor;
 
     public Player getPlayer() {
         return player;
@@ -44,9 +51,9 @@ public class FirstScreen implements Screen {
 
     private void initialize() {
         batch = new SpriteBatch();
-        pauseMenu = new PauseMenu(() -> isPaused = false, this::restartGame, this::openSettings, Gdx.app::exit);
+        pauseMenu = new PauseMenu(() -> isPaused = false, this::restartGame, this::openSettings, Gdx.app::exit, this);
         Gdx.input.setCursorCatched(true);
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal(Settings.BACKGROUND_MUSIC_PATH));
+        backgroundMusic = AssetLoader.getMusic("background_music");
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
         font = new BitmapFont();
@@ -56,6 +63,7 @@ public class FirstScreen implements Screen {
                 backgroundMusic.play();
             }
         });
+        customCursor = new CustomCursor("custom_cursor");
     }
 
     private void setupGameElements() {
@@ -98,11 +106,8 @@ public class FirstScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0f, 0f, 0f, 1f);
         if (gameOver) {
-            gameOverScreen.show();
             gameOverScreen.render(delta);
             return;
-        } else {
-            gameOverScreen.hide();
         }
         handlePause();
         if (isPaused) {
@@ -122,7 +127,7 @@ public class FirstScreen implements Screen {
         spawnManager.render(batch);
         weaponManager.render(batch);
         player.render(batch);
-        renderCustomCursor();
+        customCursor.render(batch, cameraManager);
         updateRoundInfo();
         updateScore();
         updateXp();
@@ -205,11 +210,6 @@ public class FirstScreen implements Screen {
         font.draw(batch, roundInfo, worldCoords.x, worldCoords.y);
     }
 
-    private void renderCustomCursor() {
-        Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        cameraManager.unproject(mousePosition);
-        batch.draw(AssetLoader.getTexture("custom_cursor"), mousePosition.x - AssetLoader.getTexture("custom_cursor").getWidth() / 2, mousePosition.y - AssetLoader.getTexture("custom_cursor").getHeight() / 2);
-    }
 
     private void updateKillCount() {
         String killCountText = "Kills: " + player.getKillCount();

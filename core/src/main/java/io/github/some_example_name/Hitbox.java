@@ -1,4 +1,3 @@
-
 package io.github.some_example_name;
 
 import com.badlogic.gdx.graphics.Color;
@@ -16,6 +15,18 @@ public class Hitbox {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             shapeRenderer.setColor(color);
             shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+            shapeRenderer.end();
+            batch.begin();
+        }
+    }
+
+    public static void renderMeleeHitbox(SpriteBatch batch, Rectangle hitbox, Color color, float rotation) {
+        if (Settings.SHOW_MELEE_HITBOX) {
+            batch.end();
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(color);
+            shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width / 2, hitbox.height / 2, hitbox.width, hitbox.height, 1, 1, rotation);
             shapeRenderer.end();
             batch.begin();
         }

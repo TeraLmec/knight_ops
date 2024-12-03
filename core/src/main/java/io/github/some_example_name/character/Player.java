@@ -20,6 +20,7 @@ import io.github.some_example_name.ScoreManager;
 import io.github.some_example_name.Settings;
 import io.github.some_example_name.AssetLoader;
 import io.github.some_example_name.FirstScreen;
+import io.github.some_example_name.Hitbox;
 import io.github.some_example_name.weapon.Weapon;
 import io.github.some_example_name.weapon.range.Ar;
 import io.github.some_example_name.weapon.range.Bmg;
@@ -101,8 +102,8 @@ public class Player extends Character implements InputProcessor {
         this.position = new Vector2(getX(), getY());
         this.direction = new Vector2();
         updateDimensions();
-        meleeNormalSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/melee_normal_sound.mp3"));
-        meleeTouchedSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/melee_touched_sound.mp3"));
+        meleeNormalSound = AssetLoader.getSound("melee_normal"); // Ensure this line is correct
+        meleeTouchedSound = AssetLoader.getSound("melee_touched"); // Ensure this line is correct
         this.xpManager = new XpManager(this);
         this.baseSpeed = this.speed;
         this.baseMeleeDamage = this.meleeDamage;
@@ -348,9 +349,7 @@ public class Player extends Character implements InputProcessor {
         super.render(batch);
         if (attacking) {
             renderMeleeAnimation(batch);
-            batch.end(); // End the SpriteBatch before starting ShapeRenderer
-            renderMeleeHitbox(batch.getProjectionMatrix());
-            batch.begin(); // Begin the SpriteBatch again after ShapeRenderer is done
+            Hitbox.renderMeleeHitbox(batch, meleeHitbox, Color.RED, hitboxRotation);
         }
         if (currentWeapon instanceof Bmg) {
             batch.end(); // End the SpriteBatch before starting ShapeRenderer
@@ -358,14 +357,6 @@ public class Player extends Character implements InputProcessor {
             batch.begin(); // Begin the SpriteBatch again after ShapeRenderer is done
         }
         /* renderSmokes(batch); // Render smokes */
-    }
-
-    private void renderMeleeHitbox(Matrix4 projectionMatrix) {
-        shapeRenderer.setProjectionMatrix(projectionMatrix);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(meleeHitbox.x, meleeHitbox.y, meleeHitbox.width / 2, meleeHitbox.height / 2, meleeHitbox.width, meleeHitbox.height, 1, 1, hitboxRotation);
-        shapeRenderer.end();
     }
 
   /*   private void renderSmokes(SpriteBatch batch) {

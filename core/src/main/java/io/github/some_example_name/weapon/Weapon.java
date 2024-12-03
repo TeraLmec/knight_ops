@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import io.github.some_example_name.character.Enemy;
+import io.github.some_example_name.AssetLoader;
 
 public abstract class Weapon extends Sprite {
     private Player player;
@@ -47,7 +48,7 @@ public abstract class Weapon extends Sprite {
     private float ballSpeed;
     private boolean pap = false;
 
-    public Weapon(Player player, List<Enemy> enemies, String name, Texture spriteTexture, int damage, float fireRate, float ballSpeed, String shootSoundPath) {
+    public Weapon(Player player, List<Enemy> enemies, String name, Texture spriteTexture, int damage, float fireRate, float ballSpeed, String shootSoundKey) {
         super(spriteTexture);
         this.player = player;
         this.name = name;
@@ -56,7 +57,7 @@ public abstract class Weapon extends Sprite {
         this.position = new Vector2(player.getX(), player.getY());
         this.direction = new Vector2();
         this.enemies = enemies;
-        this.shootSound = Gdx.audio.newSound(Gdx.files.internal(shootSoundPath)); // Set shoot sound
+        this.shootSound = AssetLoader.getSound(shootSoundKey); // Change this line
         this.volume = 1.4f; // Default volume
         this.fireRate = fireRate;
         this.ballSpeed = ballSpeed;
@@ -84,14 +85,14 @@ public abstract class Weapon extends Sprite {
     }
 
     private void updateShootSound() {
-        String papShootSoundPath = getPapShootSoundPath();
-        if (papShootSoundPath != null) {
+        String papShootSoundKey = getPapShootSoundKey();
+        if (papShootSoundKey != null) {
             shootSound.dispose();
-            shootSound = Gdx.audio.newSound(Gdx.files.internal(papShootSoundPath));
+            shootSound = AssetLoader.getSound(papShootSoundKey); // Change this line
         }
     }
 
-    protected abstract String getPapShootSoundPath();
+    protected abstract String getPapShootSoundKey();
 
     private void updatePlayerCenter() {
         playerCenter.set(player.getX(), player.getY());

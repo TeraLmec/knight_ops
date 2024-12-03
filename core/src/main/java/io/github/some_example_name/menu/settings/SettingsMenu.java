@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.some_example_name.menu.PauseMenu;
 import io.github.some_example_name.menu.StartMenu;
+import io.github.some_example_name.AssetLoader;
 
 public class SettingsMenu {
     private Stage stage;
@@ -35,7 +36,7 @@ public class SettingsMenu {
         this.pauseMenu = pauseMenu;
         this.startMenu = startMenu;
         stage = new Stage(new ScreenViewport());
-        Skin skin = new Skin(Gdx.files.internal("assets/skin/tracer-ui.json"));
+        Skin skin = new Skin(Gdx.files.internal("assets/skin/tracer-ui.json")); // Change this line
 
         Table table = new Table();
         table.setFillParent(true);
@@ -177,7 +178,6 @@ public class SettingsMenu {
     }
 
     public void resize(int width, int height) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'resize'");
     }
     

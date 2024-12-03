@@ -65,10 +65,10 @@ public abstract class Character extends Sprite {
             currentFrame = walkAnimation.getKeyFrame(0); // Render the first frame for idle
         }
     
-        float aspectRatio = (float) currentFrame.getRegionWidth() / currentFrame.getRegionHeight();
+        float aspectRatio = (float) getCurrentFrame().getRegionWidth() / getCurrentFrame().getRegionHeight();
         float width = getWidth() * scale;
         float height = width / aspectRatio;
-        batch.draw(currentFrame, getX() - width / 2, getY() - height / 2, width, height);
+        batch.draw(getCurrentFrame(), getX() - width / 2, getY() - height / 2, width, height);
         drawHealthBar(batch);
     }
 
