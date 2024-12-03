@@ -38,6 +38,18 @@ public class Settings {
     public static final String MAP_PATH = "assets/map/dungeon.tmx";
     public static final float UNIT_SCALE = 6.0f;
 
+    // Sound pitch variation constants
+    public static final float MIN_PITCH = 0.85f;
+    public static final float MAX_PITCH = 1.15f;
+
+    // Volume settings
+    public static final float SHOOT_VOLUME = 0.75f;
+    public static final float HIT_VOLUME = 0.35f;
+    public static final float MELEE_NORMAL_VOLUME = 0.35f;
+    public static final float MELEE_TOUCHED_VOLUME = 0.35f;
+    public static final float BUTTON_CLICK_VOLUME = 0.5f;
+    public static final float MUSIC_VOLUME = 0.75f;
+
     // Enemy stats map
     public static final Map<String, Map<String, Object>> ENEMY_STATS = new HashMap<>();
 

@@ -177,11 +177,9 @@ public class AssetLoader implements Disposable {
         loadSound("shotgun_shot", "assets/sounds/shotgun_shot.mp3");
         loadSound("rifle_shot", "assets/sounds/rifle_shot.mp3");
         loadSound("sniper_shot", "assets/sounds/sniper_shot.mp3");
-        loadSound("mauser_pap_pistol_shot", "assets/sounds/pistol_shot.mp3");
         loadSound("winchester_pap_shotgun_shot", "assets/sounds/shotgun_shot.mp3");
         loadSound("bmg_pap_sniper_shot", "assets/sounds/sniper_shot.mp3");
-        loadSound("ar_pap_rifle_shot", "assets/sounds/rifle_shot.mp3");
-        loadSound("vector_pap_rifle_shot", "assets/sounds/rifle_shot.mp3");
+        loadSound("pap_shot", "assets/sounds/pap_shot.mp3");
     }
 
     /**

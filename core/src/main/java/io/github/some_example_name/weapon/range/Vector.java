@@ -21,6 +21,6 @@ public class Vector extends Weapon {
 
     @Override
     protected String getPapShootSoundKey() {
-        return "vector_pap_rifle_shot";
+        return "pap_shot";
     }
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.some_example_name.AssetLoader;
+import io.github.some_example_name.Settings;
 
 public class StartMenu {
     private Stage stage;
@@ -41,7 +42,7 @@ public class StartMenu {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                buttonClickSound.play();
+                buttonClickSound.play(Settings.BUTTON_CLICK_VOLUME);
                 isVisible = false;
                 Gdx.input.setInputProcessor(null);
                 if (onStartGame != null) {
@@ -53,7 +54,7 @@ public class StartMenu {
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                buttonClickSound.play();
+                buttonClickSound.play(Settings.BUTTON_CLICK_VOLUME);
                 isVisible = false;
                 Gdx.input.setInputProcessor(null);
                 if (onOpenSettings != null) {
@@ -65,7 +66,7 @@ public class StartMenu {
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                buttonClickSound.play();
+                buttonClickSound.play(Settings.BUTTON_CLICK_VOLUME);
                 isVisible = false;
                 Gdx.input.setInputProcessor(null);
                 if (onQuitGame != null) {

@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
+import io.github.some_example_name.Settings;
 
 public class FirstScreen implements Screen {
     private SpriteBatch batch;
@@ -49,6 +50,7 @@ public class FirstScreen implements Screen {
         Gdx.input.setCursorCatched(true);
         backgroundMusic = AssetLoader.getMusic("combat_music");
         backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(Settings.MUSIC_VOLUME); // Set volume from Settings
         backgroundMusic.play();
         font = new BitmapFont();
         font.getData().setScale(Settings.FONT_SCALE);
@@ -76,6 +78,7 @@ public class FirstScreen implements Screen {
         isPaused = false;
         gameOver = false;
         backgroundMusic.stop();
+        backgroundMusic.setVolume(Settings.MUSIC_VOLUME); // Set volume from Settings
         backgroundMusic.play();
         Gdx.input.setCursorCatched(true);
     }

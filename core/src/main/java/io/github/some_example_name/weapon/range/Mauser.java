@@ -2,7 +2,6 @@ package io.github.some_example_name.weapon.range;
 
 import io.github.some_example_name.character.Player;
 import io.github.some_example_name.weapon.Weapon;
-import io.github.some_example_name.weapon.bullets.PistolAmmo;
 import io.github.some_example_name.character.Enemy;
 import io.github.some_example_name.Settings;
 import java.util.List;
@@ -22,6 +21,6 @@ public class Mauser extends Weapon {
 
     @Override
     protected String getPapShootSoundKey() {
-        return "mauser_pap_pistol_shot";
+        return "pap_shot";
     }
 }

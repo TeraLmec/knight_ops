@@ -19,6 +19,7 @@ import com.badlogic.gdx.math.Rectangle;
 import io.github.some_example_name.Hitbox;
 import io.github.some_example_name.AssetLoader;
 import java.util.Random;
+import io.github.some_example_name.Settings;
 
 public class Ball extends Sprite {
     private float speed;
@@ -37,6 +38,7 @@ public class Ball extends Sprite {
         this.explosionAnimation = createAnimation(explosionTexture, explosionFrameCols, explosionFrameRows, 0.05f);
         this.speed = speed;
         this.hitSound = AssetLoader.getSound("hit_marker"); // Change this line
+        this.volume = Settings.HIT_VOLUME; // Use volume from Settings
         setScale(scale); // Set the scale of the ball
     }
     
@@ -108,7 +110,7 @@ public class Ball extends Sprite {
                 ballIterator.remove();
                 enemy.takeDamage(damage); // Use existing method to reduce enemy health
                 explosions.add(new Explosion(getPosition(), getExplosionAnimation())); // Add explosion
-                float pitch = 0.8f + random.nextFloat() * 0.4f;
+                float pitch = Settings.MIN_PITCH + random.nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
                 hitSound.play(volume, pitch, 0);
                 break;
             }

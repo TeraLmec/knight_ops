@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.some_example_name.FirstScreen;
 import io.github.some_example_name.menu.settings.SettingsMenu;
 import io.github.some_example_name.AssetLoader;
+import io.github.some_example_name.Settings;
 
 public class StartScreen implements Screen {
     private final Game game;
@@ -29,6 +30,7 @@ public class StartScreen implements Screen {
             // Load and play the soundtrack
             soundtrack = AssetLoader.getMusic("background_music");
             soundtrack.setLooping(true);
+            soundtrack.setVolume(Settings.MUSIC_VOLUME); // Set volume from Settings
             soundtrack.play();
 
             // Load the background texture

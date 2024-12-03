@@ -27,6 +27,7 @@ import java.util.List;
 import io.github.some_example_name.character.Enemy;
 import io.github.some_example_name.AssetLoader;
 import java.util.Random;
+import io.github.some_example_name.Settings;
 
 public abstract class Weapon extends Sprite {
     private Player player;
@@ -60,7 +61,7 @@ public abstract class Weapon extends Sprite {
         this.direction = new Vector2();
         this.enemies = enemies;
         this.shootSound = AssetLoader.getSound(shootSoundKey); // Change this line
-        this.volume = 1.4f; // Default volume
+        this.volume = Settings.SHOOT_VOLUME; // Use volume from Settings
         this.fireRate = fireRate;
         this.ballSpeed = ballSpeed;
     }
@@ -81,18 +82,18 @@ public abstract class Weapon extends Sprite {
     }
     public void setPap(boolean pap) {
         this.pap = pap;
-        if (pap) {
+        /* if (pap) {
             updateShootSound();
-        }
+        } */
     }
 
-    private void updateShootSound() {
+    /* private void updateShootSound() {
         String papShootSoundKey = getPapShootSoundKey();
         if (papShootSoundKey != null) {
             shootSound.dispose();
-            shootSound = AssetLoader.getSound(papShootSoundKey); // Change this line
+            shootSound = AssetLoader.getSound(papShootSoundKey);
         }
-    }
+    } */
 
     protected abstract String getPapShootSoundKey();
 
@@ -191,7 +192,7 @@ public abstract class Weapon extends Sprite {
         } else {
             handleNormalShoot(playerCenter, direction);
         }
-        float pitch = 0.8f + random.nextFloat() * 0.4f;
+        float pitch = Settings.MIN_PITCH + random.nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
         shootSound.play(volume, pitch, 0);
     }
 

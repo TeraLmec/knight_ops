@@ -279,11 +279,11 @@ public class Player extends Character implements InputProcessor {
     }
 
     private void playMeleeSound() {
-        float pitch = 0.8f + random.nextFloat() * 0.4f;
+        float pitch = Settings.MIN_PITCH + random.nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
         if (meleeTouched) {
-            meleeTouchedSound.play(0.4f, pitch, 0);
+            meleeTouchedSound.play(Settings.MELEE_TOUCHED_VOLUME, pitch, 0);
         } else {
-            meleeNormalSound.play(0.4f, pitch, 0);
+            meleeNormalSound.play(Settings.MELEE_NORMAL_VOLUME, pitch, 0);
         }
         meleeTouched = false;
     }
