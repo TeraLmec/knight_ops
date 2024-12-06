@@ -56,19 +56,9 @@ public class MessageManager {
         return message;
     }
 
-    public void setMessage(String message, String type) {
+    public void setMessage(String message, String hexColor) {
         this.message = message;
         this.messageStartTime = TimeUtils.millis();
-        switch (type.toLowerCase()) {
-            case "yes":
-                this.messageColor = Color.GREEN;
-                break;
-            case "no":
-                this.messageColor = Color.RED;
-                break;
-            default:
-                this.messageColor = Color.WHITE;
-                break;
-        }
+        this.messageColor = Color.valueOf(hexColor);
     }
 }

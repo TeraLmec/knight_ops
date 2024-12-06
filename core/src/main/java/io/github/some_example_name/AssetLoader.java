@@ -188,6 +188,7 @@ public class AssetLoader implements Disposable {
         loadSound("pap_jingle", "assets/sounds/pap_jingle.mp3");
         loadSound("new_round", "assets/sounds/new_round.mp3");
         loadSound("button_hover", "assets/sounds/button_hover.mp3");
+        loadSound("gun_purchase", "assets/sounds/gun_purchase.mp3");
     }
 
     /**

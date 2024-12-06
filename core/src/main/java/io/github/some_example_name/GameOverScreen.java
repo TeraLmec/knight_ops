@@ -19,6 +19,7 @@ import io.github.some_example_name.FirstScreen;
 import com.badlogic.gdx.utils.TimeUtils;
 import io.github.some_example_name.AssetLoader;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class GameOverScreen {
@@ -30,6 +31,7 @@ public class GameOverScreen {
     private long deathTime = 0;
     private float fadeAlpha = 0f;
     private static final float FADE_DURATION = 3f;
+    private Music endGameMusic;
 
     public GameOverScreen(SpriteBatch batch, BitmapFont font2, FirstScreen round) {
         this.firstScreen = batch;
@@ -47,10 +49,13 @@ public class GameOverScreen {
         Sound buttonHoverSound = AssetLoader.getSound("button_hover");
         float pitch = Settings.MIN_PITCH + new Random().nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
 
+        endGameMusic = AssetLoader.getMusic("end_game1"); // or "end_game2" based on your logic
+
         restartButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("restart button proc");
+                endGameMusic.stop(); // Stop the end game music
                 round.restartGame();
                 FirstScreen.setGameOver(false);
             }
@@ -90,8 +95,6 @@ public class GameOverScreen {
 
     public void render(float delta) {
         ScreenUtils.clear(0f, 0f, 0f, 1f);
-        stage.act(delta);
-        stage.draw();
 
         if (fadeAlpha < 1f) {
             fadeAlpha += delta / FADE_DURATION;
@@ -107,12 +110,15 @@ public class GameOverScreen {
         shapeRenderer.end();
         shapeRenderer.dispose();
 
+        stage.act(delta);
+        stage.draw();
+/* 
         SpriteBatch batch = firstScreen;
         batch.begin();
         font.draw(batch, "Game Over", Gdx.graphics.getWidth() / 2f - 50, Gdx.graphics.getHeight() / 2f + 60);
         font.draw(batch, "Score: " + score, Gdx.graphics.getWidth() / 2f - 50, Gdx.graphics.getHeight() / 2f + 30);
         font.draw(batch, "Round: " + round, Gdx.graphics.getWidth() / 2f - 50, Gdx.graphics.getHeight() / 2f);
-        batch.end();
+        batch.end(); */
     }
 
     public void hide() {

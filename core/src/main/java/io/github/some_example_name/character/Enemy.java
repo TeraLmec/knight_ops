@@ -158,8 +158,7 @@ public abstract class Enemy extends Character {
                 float pitch = Settings.MIN_PITCH + new Random().nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
                 enemyDamageSound.play(Settings.ENEMY_DAMAGE_VOLUME, pitch, 0); // Play the enemy_damage sound with volume from Settings
             } else {
-                System.out.println("DODGE");
-                messageManager.setMessage("DODGED!", "yes");
+                messageManager.setMessage("DODGED!", Settings.DEFAULT);
                 float pitch = Settings.MIN_PITCH + new Random().nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
                 dodgedSound.play(Settings.DODGED_VOLUME, pitch, 0); // Play the dodged sound with volume from Settings
             }

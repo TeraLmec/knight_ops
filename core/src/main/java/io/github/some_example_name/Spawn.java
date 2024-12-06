@@ -35,6 +35,7 @@ public class Spawn {
     private static final float ROUND_INTERVAL = Settings.ROUND_INTERVAL;
     private int totalEnemiesToSpawn;
     private TiledMap tiledMap;
+    private static final float MIN_SPAWN_INTERVAL = 0.2f; // Add this line
 
     public Spawn(TiledMap tiledMap, float unitScale) {
         this.tiledMap = tiledMap;
@@ -155,7 +156,8 @@ public class Spawn {
     private void spawnNewEnemies(float delta) {
         if (enemiesToSpawn > 0) {
             spawnTimer += delta;
-            if (spawnTimer >= SPAWN_INTERVAL) {
+            float currentSpawnInterval = Math.max(Settings.SPAWN_INTERVAL - (currentRound - 1) * 0.2f, MIN_SPAWN_INTERVAL); // Change this line
+            if (spawnTimer >= currentSpawnInterval) {
                 spawnTimer = 0;
                 if (!enemySpawns.isEmpty()) {
                     MapObject randomSpawn = getRandomSpawn();

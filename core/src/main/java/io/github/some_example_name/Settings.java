@@ -7,28 +7,34 @@ import java.util.Map;
  * Settings class that contains various constants and configurations for the game.
  */
 public class Settings {
+    // Colors
+    public static final String SPECIAL = "#e6bc49";
+    public static final String DENY = "#8c0000";
+    public static final String DEFAULT = "#999999";
+    public static final String PAP = "#9c006d";
+    public static final String ACQUIRED = "#009c7c";
+
     // Spawn constants
-    public static final float SPAWN_INTERVAL = 1f;
-    public static final float SPAWN_DISTANCE_THRESHOLD = 600;
-    public static final float INITIAL_SPAWN_INTERVAL = 4f;
-    public static final float ROUND_INTERVAL = 6f;
+    public static final float SPAWN_INTERVAL = 2f;
+    public static final float SPAWN_DISTANCE_THRESHOLD = 0;
+    public static final float ROUND_INTERVAL = 8f;
 
     // Player constants
-    public static final long DASH_DURATION = 500;
-    public static final float DASH_MULTIPLIER = 2.75f;
-    public static final int MELEE_DAMAGE = 45;
-    public static final long MELEE_COOLDOWN = 1000;
-    public static final float KNOCKBACK_DISTANCE = 100f;
-    public static final float MIN_CURSOR_DISTANCE = 50f;
+    public static final long DASH_DURATION = 750;
+    public static final float DASH_MULTIPLIER = 2.85f;
+    public static final int MELEE_DAMAGE = 55;
+    public static final long MELEE_COOLDOWN = 2500;
+    public static final float KNOCKBACK_DISTANCE = 120f;
+    public static final float MIN_CURSOR_DISTANCE = 30f;
     public static final int LEVEL_STAT = 20;
     public static final int BASE_HP = 250;
-    public static final float BASE_SPEED = 700f;
+    public static final float BASE_SPEED = 600f;
     public static final float ATTACK_STATE_TIME = 0.1f;
     public static final float DEATH_ANIMATION_FRAME_DURATION = 0.1f;
 
     // Enemy constants
-    public static final float HURT_SPEED_MULT = 0.75f;
-    public static final float KNOCKBACK_DURATION = 0.3f;
+    public static final float HURT_SPEED_MULT = 0.8f;
+    public static final float KNOCKBACK_DURATION = 0.4f;
 
     // Map constants
     public static final int TILE_WIDTH = 16;
@@ -49,21 +55,27 @@ public class Settings {
     public static final float MELEE_TOUCHED_VOLUME = 0.35f;
     public static final float BUTTON_CLICK_VOLUME = 0.5f;
     public static final float MUSIC_VOLUME = 0.75f;
-    public static final float PAP_JINGLE_VOLUME = 0.8f; // Add this line
-    public static final float DODGED_VOLUME = 0.5f; // Add this line
-    public static final float ENEMY_DAMAGE_VOLUME = 0.5f; // Add this line
-    public static final float PLAYER_DEATH_VOLUME = 0.7f; // Add this line
-    public static final float PAP_DONE_VOLUME = 0.8f; // Add this line
-    public static final float PAP_DENY_VOLUME = 0.8f; // Add this line
-    public static final float BUTTON_HOVER_VOLUME = 0.5f; // Add this line
-    public static final float NEW_ROUND_VOLUME = 0.8f; // Add this line
+    public static final float PAP_JINGLE_VOLUME = 0.8f;
+    public static final float DODGED_VOLUME = 0.5f;
+    public static final float ENEMY_DAMAGE_VOLUME = 0.5f;
+    public static final float PLAYER_DEATH_VOLUME = 0.7f;
+    public static final float PAP_DONE_VOLUME = 0.8f;
+    public static final float PAP_DENY_VOLUME = 0.8f;
+    public static final float BUTTON_HOVER_VOLUME = 0.5f;
+    public static final float NEW_ROUND_VOLUME = 0.8f;
+    public static final float GUN_PURCHASE_VOLUME = 0.8f;
 
     // Weapon costs
-    public static final int MAUSER_COST = 100;
-    public static final int WINCHESTER_COST = 150;
-    public static final int VECTOR_COST = 200;
-    public static final int BMG_COST = 250;
-    public static final int AR_COST = 300;
+    public static final int MAUSER_COST = 500;
+    public static final int WINCHESTER_COST = 750;
+    public static final int VECTOR_COST = 1250;
+    public static final int BMG_COST = 1500;
+    public static final int AR_COST = 1150;
+
+    // Weapon upgrade multiplier
+    public static final float DMG_MULT = 1.5f;
+    public static final float FIRE_RATE_MULT = 0.8f;
+    public static final float BALL_SPEED_MULT = 1.15f;
 
     // Enemy stats map
     public static final Map<String, Map<String, Object>> ENEMY_STATS = new HashMap<>();
@@ -71,12 +83,12 @@ public class Settings {
     static {
         // Armored Axeman stats
         Map<String, Object> armoredAxemanStats = new HashMap<>();
-        armoredAxemanStats.put("hp", 200);
+        armoredAxemanStats.put("hp", 250);
         armoredAxemanStats.put("range", 80f);
-        armoredAxemanStats.put("speedRange", new int[]{350, 550});
+        armoredAxemanStats.put("speedRange", new int[]{350, 600});
         armoredAxemanStats.put("dmg", 45);
         armoredAxemanStats.put("attackCooldown", 1500L);
-        armoredAxemanStats.put("points", 25);
+        armoredAxemanStats.put("points", 35);
         armoredAxemanStats.put("xpReward", 15);
         armoredAxemanStats.put("texture", AssetLoader.getTexture("armored_axeman_walk"));
         ENEMY_STATS.put("ArmoredAxeman", armoredAxemanStats);
@@ -85,10 +97,10 @@ public class Settings {
         Map<String, Object> armoredOrcStats = new HashMap<>();
         armoredOrcStats.put("hp", 190);
         armoredOrcStats.put("range", 90f);
-        armoredOrcStats.put("speedRange", new int[]{400, 550});
-        armoredOrcStats.put("dmg", 40);
+        armoredOrcStats.put("speedRange", new int[]{400, 600});
+        armoredOrcStats.put("dmg", 55);
         armoredOrcStats.put("attackCooldown", 1300L);
-        armoredOrcStats.put("points", 25);
+        armoredOrcStats.put("points", 35);
         armoredOrcStats.put("xpReward", 15);
         armoredOrcStats.put("texture", AssetLoader.getTexture("armored_orc_walk"));
         ENEMY_STATS.put("ArmoredOrc", armoredOrcStats);
@@ -97,10 +109,10 @@ public class Settings {
         Map<String, Object> armoredSkeletonStats = new HashMap<>();
         armoredSkeletonStats.put("hp", 175);
         armoredSkeletonStats.put("range", 120f);
-        armoredSkeletonStats.put("speedRange", new int[]{400, 550});
+        armoredSkeletonStats.put("speedRange", new int[]{400, 600});
         armoredSkeletonStats.put("dmg", 55);
         armoredSkeletonStats.put("attackCooldown", 1000L);
-        armoredSkeletonStats.put("points", 25);
+        armoredSkeletonStats.put("points", 35);
         armoredSkeletonStats.put("xpReward", 15);
         armoredSkeletonStats.put("texture", AssetLoader.getTexture("armored_skeleton_walk"));
         ENEMY_STATS.put("ArmoredSkeleton", armoredSkeletonStats);
@@ -119,12 +131,12 @@ public class Settings {
 
         // Great Sword Skeleton stats
         Map<String, Object> greatSwordSkeletonStats = new HashMap<>();
-        greatSwordSkeletonStats.put("hp", 100);
+        greatSwordSkeletonStats.put("hp", 120);
         greatSwordSkeletonStats.put("range", 150f);
-        greatSwordSkeletonStats.put("speedRange", new int[]{350, 500});
+        greatSwordSkeletonStats.put("speedRange", new int[]{350, 650});
         greatSwordSkeletonStats.put("dmg", 75);
         greatSwordSkeletonStats.put("attackCooldown", 1500L);
-        greatSwordSkeletonStats.put("points", 30);
+        greatSwordSkeletonStats.put("points", 40);
         greatSwordSkeletonStats.put("xpReward", 25);
         greatSwordSkeletonStats.put("texture", AssetLoader.getTexture("great_sword_skeleton_walk"));
         ENEMY_STATS.put("GreatSwordSkeleton", greatSwordSkeletonStats);
@@ -133,7 +145,7 @@ public class Settings {
         Map<String, Object> lancerStats = new HashMap<>();
         lancerStats.put("hp", 1500);
         lancerStats.put("range", 80f);
-        lancerStats.put("speedRange", new int[]{500, 750});
+        lancerStats.put("speedRange", new int[]{650, 800});
         lancerStats.put("dmg", 95);
         lancerStats.put("attackCooldown", 2500L);
         lancerStats.put("points", 500);
@@ -157,8 +169,8 @@ public class Settings {
         Map<String, Object> orcStats = new HashMap<>();
         orcStats.put("hp", 110);
         orcStats.put("range", 100f);
-        orcStats.put("speedRange", new int[]{350, 550});
-        orcStats.put("dmg", 40);
+        orcStats.put("speedRange", new int[]{350, 600});
+        orcStats.put("dmg", 50);
         orcStats.put("attackCooldown", 750L);
         orcStats.put("points", 20);
         orcStats.put("xpReward", 15);
@@ -180,8 +192,8 @@ public class Settings {
         // Slime stats
         Map<String, Object> slimeStats = new HashMap<>();
         slimeStats.put("hp", 200);
-        slimeStats.put("range", 120f);
-        slimeStats.put("speedRange", new int[]{350, 550});
+        slimeStats.put("range", 150f);
+        slimeStats.put("speedRange", new int[]{350, 600});
         slimeStats.put("dmg", 25);
         slimeStats.put("attackCooldown", 1000L);
         slimeStats.put("points", 10);
@@ -205,7 +217,7 @@ public class Settings {
         Map<String, Object> wereWolfStats = new HashMap<>();
         wereWolfStats.put("hp", 1500);
         wereWolfStats.put("range", 110f);
-        wereWolfStats.put("speedRange", new int[]{300, 500});
+        wereWolfStats.put("speedRange", new int[]{300, 600});
         wereWolfStats.put("dmg", 110);
         wereWolfStats.put("attackCooldown", 900L);
         wereWolfStats.put("points", 500);
@@ -234,9 +246,9 @@ public class Settings {
         Map<String, Object> mauserStats = new HashMap<>();
         mauserStats.put("name", "Mauser");
         mauserStats.put("texture", AssetLoader.getTexture("mauser_normal"));
-        mauserStats.put("damage", 3000);
+        mauserStats.put("damage", 35);
         mauserStats.put("fireRate", 0.275f);
-        mauserStats.put("ballSpeed", 7000f);
+        mauserStats.put("ballSpeed", 3500f);
         WEAPON_STATS.put("mauser", mauserStats);
 
         // Winchester stats
@@ -244,7 +256,7 @@ public class Settings {
         winchesterStats.put("name", "Winchester");
         winchesterStats.put("texture", AssetLoader.getTexture("winchester_normal"));
         winchesterStats.put("damage", 40);
-        winchesterStats.put("fireRate", 1.3f);
+        winchesterStats.put("fireRate", 2f);
         winchesterStats.put("ballSpeed", 3500f);
         WEAPON_STATS.put("winchester", winchesterStats);
 
@@ -253,7 +265,7 @@ public class Settings {
         vectorStats.put("name", "Vector");
         vectorStats.put("texture", AssetLoader.getTexture("vector_normal"));
         vectorStats.put("damage", 15);
-        vectorStats.put("fireRate", 0.1f);
+        vectorStats.put("fireRate", 0.15f);
         vectorStats.put("ballSpeed", 5500f);
         WEAPON_STATS.put("vector", vectorStats);
 
@@ -261,16 +273,16 @@ public class Settings {
         Map<String, Object> bmgStats = new HashMap<>();
         bmgStats.put("name", "BMG");
         bmgStats.put("texture", AssetLoader.getTexture("bmg_normal"));
-        bmgStats.put("damage", 150);
-        bmgStats.put("fireRate", 2f);
+        bmgStats.put("damage", 200);
+        bmgStats.put("fireRate", 2.5f);
         WEAPON_STATS.put("bmg", bmgStats);
 
         // AR stats
         Map<String, Object> arStats = new HashMap<>();
         arStats.put("name", "AR");
         arStats.put("texture", AssetLoader.getTexture("ar_normal"));
-        arStats.put("damage", 32);
-        arStats.put("fireRate", 0.35f);
+        arStats.put("damage", 45);
+        arStats.put("fireRate", 0.25f);
         arStats.put("ballSpeed", 6000f);
         WEAPON_STATS.put("ar", arStats);
 
@@ -278,41 +290,40 @@ public class Settings {
         Map<String, Object> mauserPapStats = new HashMap<>();
         mauserPapStats.put("name", "Mauser");
         mauserPapStats.put("texture", AssetLoader.getTexture("mauser_pap"));
-        mauserPapStats.put("damage", 45);
-        mauserPapStats.put("fireRate", 0.25f);
-        mauserPapStats.put("ballSpeed", 4000f);
+        mauserPapStats.put("damage", (int) mauserStats.get("damage") * DMG_MULT);
+        mauserPapStats.put("fireRate", (float) mauserStats.get("fireRate") * FIRE_RATE_MULT);
+        mauserPapStats.put("ballSpeed", (float) mauserStats.get("ballSpeed") * BALL_SPEED_MULT);
         WEAPON_STATS.put("mauser_pap", mauserPapStats);
 
         Map<String, Object> winchesterPapStats = new HashMap<>();
         winchesterPapStats.put("name", "Winchester");
         winchesterPapStats.put("texture", AssetLoader.getTexture("winchester_pap"));
-        winchesterPapStats.put("damage", 60);
-        winchesterPapStats.put("fireRate", 0.9f);
-        winchesterPapStats.put("ballSpeed", 3500f);
+        winchesterPapStats.put("damage", (int) winchesterStats.get("damage") * DMG_MULT);
+        winchesterPapStats.put("fireRate", (float) winchesterStats.get("fireRate") * FIRE_RATE_MULT);
+        winchesterPapStats.put("ballSpeed", (float) winchesterStats.get("ballSpeed") * BALL_SPEED_MULT);
         WEAPON_STATS.put("winchester_pap", winchesterPapStats);
 
         Map<String, Object> bmgPapStats = new HashMap<>();
         bmgPapStats.put("name", "BMG");
         bmgPapStats.put("texture", AssetLoader.getTexture("bmg_pap"));
-        bmgPapStats.put("damage", 150);
-        bmgPapStats.put("fireRate", 1.2f);
-        bmgPapStats.put("ballSpeed", 5500f);
+        bmgPapStats.put("damage", (int) bmgStats.get("damage") * DMG_MULT);
+        bmgPapStats.put("fireRate", (float) bmgStats.get("fireRate") * FIRE_RATE_MULT);
         WEAPON_STATS.put("bmg_pap", bmgPapStats);
 
         Map<String, Object> arPapStats = new HashMap<>();
         arPapStats.put("name", "AR");
         arPapStats.put("texture", AssetLoader.getTexture("ar_pap"));
-        arPapStats.put("damage", 50);
-        arPapStats.put("fireRate", 0.1f);
-        arPapStats.put("ballSpeed", 5000f);
+        arPapStats.put("damage", (int) arStats.get("damage") * DMG_MULT);
+        arPapStats.put("fireRate", (float) arStats.get("fireRate") * FIRE_RATE_MULT);
+        arPapStats.put("ballSpeed", (float) arStats.get("ballSpeed") * BALL_SPEED_MULT);
         WEAPON_STATS.put("ar_pap", arPapStats);
 
         Map<String, Object> vectorPapStats = new HashMap<>();
         vectorPapStats.put("name", "Vector");
         vectorPapStats.put("texture", AssetLoader.getTexture("vector_pap"));
-        vectorPapStats.put("damage", 35);
-        vectorPapStats.put("fireRate", 0.06f);
-        vectorPapStats.put("ballSpeed", 7000f);
+        vectorPapStats.put("damage", (int) vectorStats.get("damage") * DMG_MULT);
+        vectorPapStats.put("fireRate", (float) vectorStats.get("fireRate") * FIRE_RATE_MULT);
+        vectorPapStats.put("ballSpeed", (float) vectorStats.get("ballSpeed") * BALL_SPEED_MULT);
         WEAPON_STATS.put("vector_pap", vectorPapStats);
     }
 
