@@ -15,7 +15,8 @@ public class Mauser extends Weapon {
               (int) Settings.WEAPON_STATS.get("mauser").get("damage"), 
               (float) Settings.WEAPON_STATS.get("mauser").get("fireRate"), 
               (float) Settings.WEAPON_STATS.get("mauser").get("ballSpeed"),
-              "pistol_shot"
+              "pistol_shot",
+              (int) Settings.MAUSER_COST
         );
     }
 

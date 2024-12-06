@@ -13,8 +13,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+
+import io.github.some_example_name.AssetLoader;
 import io.github.some_example_name.Hitbox;
 import io.github.some_example_name.MessageManager;
+import com.badlogic.gdx.audio.Sound;
 
 public abstract class Enemy extends Character {
     private int dmg;
@@ -47,6 +50,8 @@ public abstract class Enemy extends Character {
     private boolean attackTriggered = false;
     private long attackTriggerTime = 0;
     private MessageManager messageManager;
+    private static final Sound dodgedSound = AssetLoader.getSound("dodged");
+    private static final Sound enemyDamageSound = AssetLoader.getSound("enemy_attack");
        
     public Enemy(Player player, float x, float y, Texture walkTexture, Texture attackTexture, Texture hurtTexture, Texture deathTexture, int attackFrameCols, int hurtFrameCols, int deathFrameCols, int hp, int[] speed, float range, int dmg, long attackCooldown, int points, int xpReward) {
         super(8, x, y, hp, getRandomSpeed(speed), walkTexture);
@@ -150,9 +155,13 @@ public abstract class Enemy extends Character {
             if (distanceToPlayer <= range) {
                 player.takeDamage(this.dmg);
                 lastAttackTime = currentTime;
+                float pitch = Settings.MIN_PITCH + new Random().nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
+                enemyDamageSound.play(Settings.ENEMY_DAMAGE_VOLUME, pitch, 0); // Play the enemy_damage sound with volume from Settings
             } else {
                 System.out.println("DODGE");
-                messageManager.setMessage("DODGED!");
+                messageManager.setMessage("DODGED!", "yes");
+                float pitch = Settings.MIN_PITCH + new Random().nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
+                dodgedSound.play(Settings.DODGED_VOLUME, pitch, 0); // Play the dodged sound with volume from Settings
             }
             attackTriggered = false;
         }

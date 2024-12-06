@@ -50,8 +50,9 @@ public abstract class Weapon extends Sprite {
     private float ballSpeed;
     private boolean pap = false;
     private Random random = new Random();
+    private int weaponCost;
 
-    public Weapon(Player player, List<Enemy> enemies, String name, Texture spriteTexture, int damage, float fireRate, float ballSpeed, String shootSoundKey) {
+    public Weapon(Player player, List<Enemy> enemies, String name, Texture spriteTexture, int damage, float fireRate, float ballSpeed, String shootSoundKey, int weaponCost) {
         super(spriteTexture);
         this.player = player;
         this.name = name;
@@ -64,6 +65,7 @@ public abstract class Weapon extends Sprite {
         this.volume = Settings.SHOOT_VOLUME; // Use volume from Settings
         this.fireRate = fireRate;
         this.ballSpeed = ballSpeed;
+        this.weaponCost = weaponCost; // Add this line
     }
 
     public void update(float delta, OrthographicCamera camera, List<Enemy> enemies) {
@@ -249,7 +251,6 @@ public abstract class Weapon extends Sprite {
         return damage;
     }
 
-
     public float getStateTime() {
         return stateTime;
     }
@@ -300,6 +301,10 @@ public abstract class Weapon extends Sprite {
 
     public void setBallSpeed(float ballSpeed) {
         this.ballSpeed = ballSpeed;
+    }
+
+    public int getWeaponCost() {
+        return weaponCost;
     }
 
     public void dispose() {

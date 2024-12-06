@@ -180,6 +180,14 @@ public class AssetLoader implements Disposable {
         loadSound("winchester_pap_shotgun_shot", "assets/sounds/shotgun_shot.mp3");
         loadSound("bmg_pap_sniper_shot", "assets/sounds/sniper_shot.mp3");
         loadSound("pap_shot", "assets/sounds/pap_shot.mp3");
+        loadSound("dodged", "assets/sounds/dodged.mp3");
+        loadSound("enemy_attack", "assets/sounds/enemy_attack.mp3");
+        loadSound("player_death", "assets/sounds/player_death.mp3");
+        loadSound("pap_done", "assets/sounds/pap_done.mp3");
+        loadSound("pap_deny", "assets/sounds/pap_deny.mp3");
+        loadSound("pap_jingle", "assets/sounds/pap_jingle.mp3");
+        loadSound("new_round", "assets/sounds/new_round.mp3");
+        loadSound("button_hover", "assets/sounds/button_hover.mp3");
     }
 
     /**
@@ -197,6 +205,8 @@ public class AssetLoader implements Disposable {
     private static void loadMusic() {
         loadMusic("background_music", "assets/sounds/start_menu/from_past_to_present.mp3");
         loadMusic("combat_music", "assets/sounds/game/blindpick.mp3");
+        loadMusic("end_game1", "assets/sounds/end_game1.mp3");
+        loadMusic("end_game2", "assets/sounds/end_game2.mp3");
     }
 
     /**

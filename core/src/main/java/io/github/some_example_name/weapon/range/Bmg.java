@@ -27,7 +27,8 @@ public class Bmg extends Weapon {
               (Texture) Settings.WEAPON_STATS.get("bmg").get("texture"), 
               (int) Settings.WEAPON_STATS.get("bmg").get("damage"), 
               (float) Settings.WEAPON_STATS.get("bmg").get("fireRate"), 5000f,
-              "sniper_shot"
+              "sniper_shot",
+              (int) Settings.BMG_COST
         );
     }
 

@@ -105,6 +105,7 @@ public class FirstScreen implements Screen {
         ScreenUtils.clear(0f, 0f, 0f, 1f);
         if (gameOver) {
             gameOverScreen.render(delta);
+            gameOverScreen.show();
             return;
         }
         handlePause();
@@ -202,6 +203,22 @@ public class FirstScreen implements Screen {
         } else {
             backgroundMusic.stop();
         }
+        if (player.isDead() && !gameOver) {
+            handlePlayerDeath();
+        }
+    }
+
+    private void handlePlayerDeath() {
+        backgroundMusic.stop();
+        Music endGameMusic;
+        if (spawnManager.getCurrentRound() <= 5) {
+            endGameMusic = AssetLoader.getMusic("end_game1");
+        } else {
+            endGameMusic = AssetLoader.getMusic("end_game2");
+        }
+        endGameMusic.setVolume(Settings.MUSIC_VOLUME);
+        endGameMusic.play();
+        gameOver = true;
     }
 
     private void updateRoundInfo() {

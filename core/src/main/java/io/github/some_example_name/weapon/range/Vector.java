@@ -15,7 +15,8 @@ public class Vector extends Weapon {
               (int) Settings.WEAPON_STATS.get("vector").get("damage"), 
               (float) Settings.WEAPON_STATS.get("vector").get("fireRate"), 
               (float) Settings.WEAPON_STATS.get("vector").get("ballSpeed"),
-              "rifle_shot"
+              "rifle_shot",
+              (int) Settings.VECTOR_COST
         );
     }
 

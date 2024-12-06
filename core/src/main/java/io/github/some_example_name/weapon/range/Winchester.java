@@ -15,7 +15,8 @@ public class Winchester extends Weapon {
               (int) Settings.WEAPON_STATS.get("winchester").get("damage"), 
               (float) Settings.WEAPON_STATS.get("winchester").get("fireRate"), 
               (float) Settings.WEAPON_STATS.get("winchester").get("ballSpeed"),
-              "shotgun_shot"
+              "shotgun_shot",
+              (int) Settings.WINCHESTER_COST
         );
     }
 

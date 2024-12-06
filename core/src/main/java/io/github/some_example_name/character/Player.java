@@ -146,8 +146,14 @@ public class Player extends Character implements InputProcessor {
         float moveY = getMoveY();
         setWalking(moveX != 0 || moveY != 0);
         handleDash();
-        setX(getX() + moveX * getSpeed() * dashMultiplier * speedShootMultiplier * deltaTime);
-        setY(getY() + moveY * getSpeed() * dashMultiplier * speedShootMultiplier * deltaTime);
+        float dashSpeed = getSpeed() * dashMultiplier * speedShootMultiplier * deltaTime;
+        float dashDistance = (float) Math.sqrt(moveX * moveX + moveY * moveY);
+        if (dashDistance > 0) {
+            moveX = (moveX / dashDistance) * dashSpeed;
+            moveY = (moveY / dashDistance) * dashSpeed;
+        }
+        setX(getX() + moveX);
+        setY(getY() + moveY);
     }
 
     @Override
@@ -173,6 +179,9 @@ public class Player extends Character implements InputProcessor {
             deathTime = TimeUtils.millis();
             System.out.println("Player is dead");
             setStateTime(0); // Reset state time for death animation
+            Sound playerDeathSound = AssetLoader.getSound("player_death");
+            float pitch = Settings.MIN_PITCH + random.nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
+            playerDeathSound.play(Settings.PLAYER_DEATH_VOLUME, pitch, 0); // Play the player_death sound with volume from Settings
         }
     }
 

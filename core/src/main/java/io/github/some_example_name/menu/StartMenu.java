@@ -8,9 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.some_example_name.AssetLoader;
 import io.github.some_example_name.Settings;
+import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import java.util.Random;
 
 public class StartMenu {
     private Stage stage;
@@ -19,6 +23,7 @@ public class StartMenu {
     private Runnable onOpenSettings;
     private Runnable onQuitGame;
     private Sound buttonClickSound;
+    private long lastHoverTime = 0;
 
     public StartMenu(Runnable onStartGame, Runnable onOpenSettings, Runnable onQuitGame) {
         this.onStartGame = onStartGame;
@@ -30,6 +35,7 @@ public class StartMenu {
 
         // Load the button click sound
         buttonClickSound = AssetLoader.getSound("button_click");
+        Sound buttonHoverSound = AssetLoader.getSound("button_hover");
 
         Table table = new Table();
         table.setFillParent(true);
@@ -38,6 +44,22 @@ public class StartMenu {
         TextButton startButton = new TextButton("Lancer une partie", skin);
         TextButton settingsButton = new TextButton("Parametres", skin);
         TextButton quitButton = new TextButton("Quitter le jeu", skin);
+
+        InputListener hoverListener = new InputListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                long currentTime = TimeUtils.millis();
+                if (currentTime - lastHoverTime > 250) { // Change this line
+                    float pitch = Settings.MIN_PITCH + new Random().nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
+                    buttonHoverSound.play(Settings.BUTTON_HOVER_VOLUME, pitch, 0);
+                    lastHoverTime = currentTime;
+                }
+            }
+        };
+
+        startButton.addListener(hoverListener);
+        settingsButton.addListener(hoverListener);
+        quitButton.addListener(hoverListener);
 
         startButton.addListener(new ClickListener() {
             @Override

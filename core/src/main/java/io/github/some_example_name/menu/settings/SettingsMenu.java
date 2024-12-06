@@ -2,6 +2,7 @@ package io.github.some_example_name.menu.settings;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -14,11 +15,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.some_example_name.menu.PauseMenu;
 import io.github.some_example_name.menu.StartMenu;
 import io.github.some_example_name.AssetLoader;
+import io.github.some_example_name.Settings;
+
+import java.util.Random;
 
 public class SettingsMenu {
     private Stage stage;
@@ -31,6 +37,7 @@ public class SettingsMenu {
     private static final String PREFS_NAME = "settings";
     private static final String RESOLUTION_KEY = "resolution";
     private Runnable onResolutionChange;
+    private long lastHoverTime = 0; // Add this line
 
     public SettingsMenu(PauseMenu pauseMenu, StartMenu startMenu) {
         this.pauseMenu = pauseMenu;
@@ -41,6 +48,20 @@ public class SettingsMenu {
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
+
+        Sound buttonHoverSound = AssetLoader.getSound("button_hover"); // Add this line
+
+        InputListener hoverListener = new InputListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                long currentTime = TimeUtils.millis();
+                if (currentTime - lastHoverTime > 150) { // Change this line
+                    float pitch = Settings.MIN_PITCH + new Random().nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
+                    buttonHoverSound.play(Settings.BUTTON_HOVER_VOLUME, pitch, 0);
+                    lastHoverTime = currentTime;
+                }
+            }
+        };
 
         // Luminosité
         TextButton brightnessLabel = new TextButton("Luminosité", skin);
@@ -53,6 +74,7 @@ public class SettingsMenu {
                 BrightnessManager.setBrightness(brightnessValue);
             }
         });
+        brightnessLabel.addListener(hoverListener);
         table.add(brightnessLabel).fillX().uniformX();
         table.add(brightnessSlider).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
@@ -67,6 +89,7 @@ public class SettingsMenu {
                 selectedResolution = resolutionSelectBox.getSelected();
             }
         });
+        resolutionLabel.addListener(hoverListener);
         table.add(resolutionLabel).fillX().uniformX();
         table.add(resolutionSelectBox).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
@@ -79,6 +102,7 @@ public class SettingsMenu {
                 applyResolutionChange();
             }
         });
+        applyButton.addListener(hoverListener);
         table.add(applyButton).colspan(2).center().padTop(20);
         table.row().pad(10, 0, 10, 0);
 
@@ -95,6 +119,7 @@ public class SettingsMenu {
                 }
             }
         });
+        backButton.addListener(hoverListener);
         table.add(backButton).colspan(2).center().padTop(20);
     }
 

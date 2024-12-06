@@ -1,5 +1,7 @@
 package io.github.some_example_name;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -10,11 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.github.some_example_name.FirstScreen;
 import com.badlogic.gdx.utils.TimeUtils;
 import io.github.some_example_name.AssetLoader;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class GameOverScreen {
     private final Stage stage;
@@ -23,6 +28,8 @@ public class GameOverScreen {
     private final BitmapFont score;
     private final FirstScreen round;
     private long deathTime = 0;
+    private float fadeAlpha = 0f;
+    private static final float FADE_DURATION = 3f;
 
     public GameOverScreen(SpriteBatch batch, BitmapFont font2, FirstScreen round) {
         this.firstScreen = batch;
@@ -37,12 +44,20 @@ public class GameOverScreen {
         TextButton restartButton = new TextButton("Recommencer la partie", skin);
         TextButton quitButton = new TextButton("Quitter le jeu", skin);
 
+        Sound buttonHoverSound = AssetLoader.getSound("button_hover");
+        float pitch = Settings.MIN_PITCH + new Random().nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
+
         restartButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("restart button proc");
                 round.restartGame();
                 FirstScreen.setGameOver(false);
+            }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                buttonHoverSound.play(Settings.BUTTON_HOVER_VOLUME, pitch, 0);
             }
         });
 
@@ -51,6 +66,11 @@ public class GameOverScreen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Quit button proc");
                 Gdx.app.exit();
+            }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                buttonHoverSound.play(Settings.BUTTON_HOVER_VOLUME, pitch, 0);
             }
         });
 
@@ -65,13 +85,27 @@ public class GameOverScreen {
 
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        Gdx.input.setCursorCatched(false); // Show the cursor
+        Gdx.input.setCursorCatched(false);
     }
 
     public void render(float delta) {
         ScreenUtils.clear(0f, 0f, 0f, 1f);
         stage.act(delta);
         stage.draw();
+
+        if (fadeAlpha < 1f) {
+            fadeAlpha += delta / FADE_DURATION;
+            if (fadeAlpha > 1f) {
+                fadeAlpha = 1f;
+            }
+        }
+
+        ShapeRenderer shapeRenderer = new ShapeRenderer();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(0, 0, 0, fadeAlpha);
+        shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        shapeRenderer.end();
+        shapeRenderer.dispose();
 
         SpriteBatch batch = firstScreen;
         batch.begin();

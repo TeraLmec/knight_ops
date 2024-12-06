@@ -15,6 +15,7 @@ public class MessageManager {
     private long messageStartTime;
     private static final long DISPLAY_DURATION = 1500;
     private static final long FADE_DURATION = 1000;
+    private Color messageColor; // Add this line
 
     public MessageManager(Player player) {
         this.font = new BitmapFont();
@@ -22,6 +23,7 @@ public class MessageManager {
         this.player = player;
         this.message = "";
         this.messageStartTime = 0;
+        this.messageColor = Color.WHITE; // Default color
     }
 
     public void displayMessage(SpriteBatch batch, String message, float x, float y) {
@@ -41,6 +43,7 @@ public class MessageManager {
                     alpha = 1f - (elapsedTime - DISPLAY_DURATION) / (float) FADE_DURATION;
                 }
                 font.setColor(1, 1, 1, alpha);
+                font.setColor(messageColor); // Set the font color
                 displayMessage(batch, message, player.getX(), player.getY() + 50);
                 font.setColor(Color.WHITE); // Reset color
             } else {
@@ -53,8 +56,19 @@ public class MessageManager {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(String message, String type) {
         this.message = message;
         this.messageStartTime = TimeUtils.millis();
+        switch (type.toLowerCase()) {
+            case "yes":
+                this.messageColor = Color.GREEN;
+                break;
+            case "no":
+                this.messageColor = Color.RED;
+                break;
+            default:
+                this.messageColor = Color.WHITE;
+                break;
+        }
     }
 }

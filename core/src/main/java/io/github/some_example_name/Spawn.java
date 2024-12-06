@@ -12,6 +12,7 @@ import io.github.some_example_name.character.enemies.bosses.Lancer;
 import io.github.some_example_name.character.enemies.bosses.OrcRider;
 import io.github.some_example_name.character.enemies.bosses.WereBear;
 import io.github.some_example_name.character.enemies.bosses.WereWolf;
+import com.badlogic.gdx.audio.Sound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,6 +129,9 @@ public class Spawn {
                 bossY = rect.y * unitScale;
             } while (!isFarFromPlayer(bossX, bossY));
 
+            Sound newRoundSound = AssetLoader.getSound("new_round");
+            float pitch = Settings.MIN_PITCH + random.nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
+            newRoundSound.play(Settings.NEW_ROUND_VOLUME, pitch, 0); // Play the new_round sound with volume from Settings
             enemies.add(createRandomBoss(bossX, bossY));
         }
     }

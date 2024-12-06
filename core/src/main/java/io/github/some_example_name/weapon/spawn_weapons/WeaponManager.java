@@ -24,9 +24,11 @@ import io.github.some_example_name.AssetLoader;
 import io.github.some_example_name.character.Player;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import io.github.some_example_name.MessageManager;
+import com.badlogic.gdx.audio.Sound;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class WeaponManager {
     private List<Weapon> weapons;
@@ -103,6 +105,9 @@ public class WeaponManager {
                         float x = rect.x * unitScale;
                         float y = rect.y * unitScale;
                         pap = new Pap(x, y);
+                        Sound papJingle = AssetLoader.getSound("pap_jingle");
+                        messageManager.setMessage("Pack-a-punch spawned", "yes");
+                        papJingle.play(Settings.PAP_JINGLE_VOLUME);
                     }
                 }
             }
@@ -120,21 +125,16 @@ public class WeaponManager {
         for (Weapon weapon : weapons) {
             if (isPlayerNearWeapon(weapon)) {
                 if (isBuying && weaponToBuy == weapon) {
-                    messageManager.displayMessage(batch, "Appuyez sur E pour confirmer l'achat de " + weapon.getName(), weapon.getX(), weapon.getY());
+                    messageManager.displayMessage(batch, "Press E to buy " + weapon.getName(), weapon.getX() + 250, weapon.getY() + 250);
                 } else {
-                    messageManager.displayMessage(batch, "Acheter", weapon.getX() + 250, weapon.getY() + 250);
+                    messageManager.displayMessage(batch, "Buy " + weapon.getName() + " | " + weapon.getWeaponCost(), weapon.getX() + 250, weapon.getY() + 250);
                 }
             }
         }
 
         // Check for player proximity to pap and display message
         if (pap != null && isPlayerNearPap()) {
-            messageManager.displayMessage(batch, "Voulez-vous améliorer votre " + player.getCurrentWeapon().getName() + " ?", pap.getBounds().x, pap.getBounds().y + pap.getBounds().height);
-        }
-
-        // Display purchase message if any
-        if (!messageManager.getMessage().isEmpty()) {
-            messageManager.displayMessage(batch, messageManager.getMessage(), player.getX(), player.getY() + 50);
+            messageManager.displayMessage(batch, "Do you want to upgrade " + player.getCurrentWeapon().getName() + " | " + player.getCurrentWeapon().getWeaponCost() +  " ?", pap.getBounds().x, pap.getBounds().y + pap.getBounds().height);
         }
 
         messageManager.render(batch);
@@ -142,7 +142,7 @@ public class WeaponManager {
 
     public void update(float delta, OrthographicCamera camera) {
         for (Weapon weapon : weapons) {
-            weapon.update(delta, camera, null); // Pass the camera and null for enemies for now
+            weapon.update(delta, camera, null);
         }
 
         // Handle weapon purchase
@@ -168,26 +168,20 @@ public class WeaponManager {
         return pap != null && pap.getBounds().contains(player.getX(), player.getY());
     }
 
-    private void displayMessage(SpriteBatch batch, String message, float x, float y) {
-        layout.setText(font, message);
-        font.getData().setScale(2); // Increase font size
-        font.draw(batch, message, x, y); // Center the message
-        font.getData().setScale(1); // Reset font size
-    }
-
     private void handleWeaponPurchase() {
         for (Weapon weapon : weapons) {
             if (isPlayerNearWeapon(weapon)) {
                 if (isBuying && weaponToBuy == weapon) {
-                    int weaponCost = 100; // Example cost
+                    int weaponCost = weapon.getWeaponCost();
                     if (ScoreManager.getInstance().getScore() >= weaponCost) {
                         ScoreManager.getInstance().addPoints(-weaponCost);
-                        Weapon newWeapon = createWeaponInstance(weapon); // Create a new instance of the weapon
-                        player.addWeapon(newWeapon); // Add the new weapon to the player
+                        Weapon newWeapon = createWeaponInstance(weapon);
+                        player.addWeapon(newWeapon);
                         isBuying = false;
                         weaponToBuy = null;
+                        messageManager.setMessage(weapon.getName() + " acquired!", "yes");
                     } else {
-                        messageManager.setMessage("Points insuffisants pour " + weapon.getName());
+                        messageManager.setMessage("Not enough points to buy " + weapon.getName(), "no");
                         isBuying = false;
                         weaponToBuy = null;
                     }
@@ -220,12 +214,18 @@ public class WeaponManager {
         if (isPlayerNearPap()) {
             Weapon currentWeapon = player.getCurrentWeapon();
             int upgradeCost = 100;
+            Sound papDoneSound = AssetLoader.getSound("pap_done");
+            Sound papDenySound = AssetLoader.getSound("pap_deny");
+            float pitch = Settings.MIN_PITCH + new Random().nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
+
             if (ScoreManager.getInstance().getScore() >= upgradeCost) {
                 ScoreManager.getInstance().addPoints(-upgradeCost);
                 upgradeWeapon(currentWeapon);
-                messageManager.setMessage("");
+                papDoneSound.play(Settings.PAP_DONE_VOLUME, pitch, 0);
+                messageManager.setMessage(player.getCurrentWeapon().getName() + " upgraded!", "yes");
             } else {
-                messageManager.setMessage("");
+                papDenySound.play(Settings.PAP_DENY_VOLUME, pitch, 0);
+                messageManager.setMessage("Not enough points to upgrade" + player.getCurrentWeapon().getName(), "no");
             }
         }
     }
@@ -244,6 +244,8 @@ public class WeaponManager {
 
         weapon.setDamage((int) Settings.WEAPON_STATS.get(papTextureName).get("damage"));
         weapon.setFireRate((float) Settings.WEAPON_STATS.get(papTextureName).get("fireRate"));
-        weapon.setBallSpeed((float) Settings.WEAPON_STATS.get(papTextureName).get("ballSpeed"));
+        if (!(weapon instanceof Bmg)) {
+            weapon.setBallSpeed((float) Settings.WEAPON_STATS.get(papTextureName).get("ballSpeed"));
+        }
     }
 }

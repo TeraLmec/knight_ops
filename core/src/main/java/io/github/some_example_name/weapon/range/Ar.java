@@ -10,12 +10,13 @@ import com.badlogic.gdx.graphics.Texture;
 public class Ar extends Weapon {
     public Ar(Player player, List<Enemy> enemies) {
         super(player, enemies,
-              (String) Settings.WEAPON_STATS.get("ar").get("name"), 
-              (Texture) Settings.WEAPON_STATS.get("ar").get("texture"), 
-              (int) Settings.WEAPON_STATS.get("ar").get("damage"), 
-              (float) Settings.WEAPON_STATS.get("ar").get("fireRate"), 
-              (float) Settings.WEAPON_STATS.get("ar").get("ballSpeed"),
-              "rifle_shot"
+            (String) Settings.WEAPON_STATS.get("ar").get("name"), 
+            (Texture) Settings.WEAPON_STATS.get("ar").get("texture"), 
+            (int) Settings.WEAPON_STATS.get("ar").get("damage"), 
+            (float) Settings.WEAPON_STATS.get("ar").get("fireRate"), 
+            (float) Settings.WEAPON_STATS.get("ar").get("ballSpeed"),
+            "rifle_shot",
+            (int) Settings.AR_COST
         );
     }
 

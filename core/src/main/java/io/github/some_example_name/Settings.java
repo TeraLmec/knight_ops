@@ -21,7 +21,7 @@ public class Settings {
     public static final float KNOCKBACK_DISTANCE = 100f;
     public static final float MIN_CURSOR_DISTANCE = 50f;
     public static final int LEVEL_STAT = 20;
-    public static final int BASE_HP = 250000;
+    public static final int BASE_HP = 250;
     public static final float BASE_SPEED = 700f;
     public static final float ATTACK_STATE_TIME = 0.1f;
     public static final float DEATH_ANIMATION_FRAME_DURATION = 0.1f;
@@ -49,6 +49,21 @@ public class Settings {
     public static final float MELEE_TOUCHED_VOLUME = 0.35f;
     public static final float BUTTON_CLICK_VOLUME = 0.5f;
     public static final float MUSIC_VOLUME = 0.75f;
+    public static final float PAP_JINGLE_VOLUME = 0.8f; // Add this line
+    public static final float DODGED_VOLUME = 0.5f; // Add this line
+    public static final float ENEMY_DAMAGE_VOLUME = 0.5f; // Add this line
+    public static final float PLAYER_DEATH_VOLUME = 0.7f; // Add this line
+    public static final float PAP_DONE_VOLUME = 0.8f; // Add this line
+    public static final float PAP_DENY_VOLUME = 0.8f; // Add this line
+    public static final float BUTTON_HOVER_VOLUME = 0.5f; // Add this line
+    public static final float NEW_ROUND_VOLUME = 0.8f; // Add this line
+
+    // Weapon costs
+    public static final int MAUSER_COST = 100;
+    public static final int WINCHESTER_COST = 150;
+    public static final int VECTOR_COST = 200;
+    public static final int BMG_COST = 250;
+    public static final int AR_COST = 300;
 
     // Enemy stats map
     public static final Map<String, Map<String, Object>> ENEMY_STATS = new HashMap<>();

@@ -1,25 +1,32 @@
 package io.github.some_example_name.menu;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.some_example_name.menu.settings.SettingsMenu;
 import io.github.some_example_name.AssetLoader;
 import io.github.some_example_name.FirstScreen;
+import io.github.some_example_name.Settings;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import java.util.Random;
 
 public class PauseMenu {
     private Stage stage;
     private boolean isVisible;
     private SettingsMenu settingsMenu;
     private final FirstScreen round;
+    private long lastHoverTime = 0;
 
     public PauseMenu(Runnable onResume, Runnable onRestart, Runnable onOpenSettings, Runnable onQuitGame, FirstScreen round) {
         stage = new Stage(new ScreenViewport());
@@ -27,11 +34,29 @@ public class PauseMenu {
         this.stage = new Stage(new ScreenViewport());
         Skin skin = new Skin(Gdx.files.internal("assets/skin/tracer-ui.json")); // Change this line
         settingsMenu = new SettingsMenu(this, null);
+        Sound buttonHoverSound = AssetLoader.getSound("button_hover");
 
         TextButton resumeButton = new TextButton("Reprendre la partie", skin);
         TextButton restartButton = new TextButton("Recommencer la partie", skin);
         TextButton settingsButton = new TextButton("Parametres", skin);
         TextButton quitButton = new TextButton("Quitter le jeu", skin);
+
+        InputListener hoverListener = new InputListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                long currentTime = TimeUtils.millis();
+                if (currentTime - lastHoverTime > 150) { // Change this line
+                    float pitch = Settings.MIN_PITCH + new Random().nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
+                    buttonHoverSound.play(Settings.BUTTON_HOVER_VOLUME, pitch, 0);
+                    lastHoverTime = currentTime;
+                }
+            }
+        };
+
+        resumeButton.addListener(hoverListener);
+        restartButton.addListener(hoverListener);
+        settingsButton.addListener(hoverListener);
+        quitButton.addListener(hoverListener);
 
         resumeButton.addListener(new ClickListener() {
             @Override
