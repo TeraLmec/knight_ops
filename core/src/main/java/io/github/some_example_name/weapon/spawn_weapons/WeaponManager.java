@@ -134,7 +134,7 @@ public class WeaponManager {
 
         // Check for player proximity to pap and display message
         if (pap != null && isPlayerNearPap()) {
-            messageManager.displayMessage(batch, "Do you want to upgrade " + player.getCurrentWeapon().getName() + " | " + player.getCurrentWeapon().getWeaponCost() +  " ?", pap.getBounds().x + pap.getBounds().width / 2, pap.getBounds().y + pap.getBounds().height / 2);
+            messageManager.displayMessage(batch, "Do you want to upgrade " + player.getCurrentWeapon().getName() + " | " + (int) player.getCurrentWeapon().getWeaponCost() * 1.25f +  " ?", pap.getBounds().x + pap.getBounds().width / 2, pap.getBounds().y + pap.getBounds().height / 2);
         }
 
         messageManager.render(batch);
@@ -281,7 +281,7 @@ public class WeaponManager {
             default:
                 throw new IllegalArgumentException("Unknown weapon: " + weapon.getName());
         }
-        return (int) (baseCost * 1.25);
+        return (int) (baseCost * 1.25f);
     }
 
     private void upgradeWeapon(Weapon weapon) {

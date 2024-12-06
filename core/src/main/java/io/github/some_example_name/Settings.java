@@ -21,10 +21,10 @@ public class Settings {
 
     // Player constants
     public static final long DASH_DURATION = 750;
-    public static final float DASH_MULTIPLIER = 2.85f;
-    public static final int MELEE_DAMAGE = 55;
-    public static final long MELEE_COOLDOWN = 2500;
-    public static final float KNOCKBACK_DISTANCE = 120f;
+    public static final float DASH_MULTIPLIER = 3.1f;
+    public static final int MELEE_DAMAGE = 50;
+    public static final long MELEE_COOLDOWN = 1750;
+    public static final float KNOCKBACK_DISTANCE = 100f;
     public static final float MIN_CURSOR_DISTANCE = 30f;
     public static final int LEVEL_STAT = 20;
     public static final int BASE_HP = 250;
@@ -35,6 +35,8 @@ public class Settings {
     // Enemy constants
     public static final float HURT_SPEED_MULT = 0.8f;
     public static final float KNOCKBACK_DURATION = 0.4f;
+    public static final int DODGE_WINDOW = 300;
+
 
     // Map constants
     public static final int TILE_WIDTH = 16;

@@ -36,7 +36,7 @@ import java.util.Random;
 public class Player extends Character implements InputProcessor {
     // Player state variables
     private boolean dashing = false;
-    private float dashMultiplier = 1;
+    private float dashMultiplier = Settings.DASH_MULTIPLIER;
     private long dashStartTime;
     private long dashDuration = Settings.DASH_DURATION;
     private int meleeDamage = Settings.MELEE_DAMAGE;
@@ -205,7 +205,6 @@ public class Player extends Character implements InputProcessor {
     private void startDash() {
         dashStartTime = TimeUtils.millis();
         dashing = true;
-        dashMultiplier = 2.5f;
         /* smokes.add(new Smoke(position.cpy())); // Add smoke at the start of the dash */
     }
 

@@ -43,7 +43,7 @@ public abstract class Enemy extends Character {
     private static final float HURT_SPEED_MULT = Settings.HURT_SPEED_MULT;
     private int points;
     private Vector2 knockbackVelocity = new Vector2();
-    private float knockbackDuration = Settings.KNOCKBACK_DURATION; // Duration of the knockback effect in seconds
+    private float knockbackDuration = Settings.KNOCKBACK_DURATION;
     private float knockbackTime = 0;
     private int xpReward;
     private long playerInRangeStartTime = -1;
@@ -151,7 +151,7 @@ public abstract class Enemy extends Character {
     private void checkDodge() {
         long currentTime = TimeUtils.millis();
         float distanceToPlayer = calculateDistanceToPlayer();
-        if (attackTriggered && currentTime - attackTriggerTime >= 500) {
+        if (attackTriggered && currentTime - attackTriggerTime >= Settings.DODGE_WINDOW) {
             if (distanceToPlayer <= range) {
                 player.takeDamage(this.dmg);
                 lastAttackTime = currentTime;
