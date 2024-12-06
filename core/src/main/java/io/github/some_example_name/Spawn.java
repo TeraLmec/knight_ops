@@ -33,8 +33,10 @@ public class Spawn {
     private boolean roundInProgress;
     private static final float ROUND_INTERVAL = Settings.ROUND_INTERVAL;
     private int totalEnemiesToSpawn;
+    private TiledMap tiledMap;
 
     public Spawn(TiledMap tiledMap, float unitScale) {
+        this.tiledMap = tiledMap;
         this.enemies = new ArrayList<>();
         this.unitScale = unitScale;
         this.random = new Random();
@@ -234,6 +236,10 @@ public class Spawn {
 
     public int getTotalEnemiesToSpawn() {
         return totalEnemiesToSpawn;
+    }
+
+    public TiledMap getTiledMap() {
+        return tiledMap;
     }
 
     public void dispose() {

@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import io.github.some_example_name.Settings;
+import io.github.some_example_name.MessageManager;
 
 public class FirstScreen implements Screen {
     private SpriteBatch batch;
@@ -31,6 +32,7 @@ public class FirstScreen implements Screen {
     private WeaponManager weaponManager;
     private GameOverScreen gameOverScreen;
     private CustomCursor customCursor;
+    private MessageManager messageManager;
 
     public Player getPlayer() {
         return player;
@@ -65,11 +67,12 @@ public class FirstScreen implements Screen {
         mapManager.loadMap();
         spawnManager = new Spawn(mapManager.getTiledMap(), mapManager.getUnitScale());
         player = spawnManager.getPlayer();
-        weaponManager = new WeaponManager(mapManager.getTiledMap(), player, mapManager.getUnitScale());
+        weaponManager = new WeaponManager(mapManager.getTiledMap(), player, mapManager.getUnitScale(), spawnManager);
         borderThickness = mapManager.getBorderThickness();
         cameraManager = new CameraManager(MapManager.getTiledMapWidth(), MapManager.getTiledMapHeight());
         cameraManager.updatePosition(new Vector2(player.getX(), player.getY()));
         spawnManager.update(0);
+        messageManager = new MessageManager(player);
     }
 
     public void restartGame() {
@@ -123,6 +126,7 @@ public class FirstScreen implements Screen {
         weaponManager.render(batch);
         player.render(batch);
         customCursor.render(batch, cameraManager);
+        messageManager.render(batch);
         updateRoundInfo();
         updateScore();
         updateXp();

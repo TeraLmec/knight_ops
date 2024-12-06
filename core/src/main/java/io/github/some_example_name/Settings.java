@@ -219,9 +219,9 @@ public class Settings {
         Map<String, Object> mauserStats = new HashMap<>();
         mauserStats.put("name", "Mauser");
         mauserStats.put("texture", AssetLoader.getTexture("mauser_normal"));
-        mauserStats.put("damage", 30);
+        mauserStats.put("damage", 3000);
         mauserStats.put("fireRate", 0.275f);
-        mauserStats.put("ballSpeed", 3500f);
+        mauserStats.put("ballSpeed", 7000f);
         WEAPON_STATS.put("mauser", mauserStats);
 
         // Winchester stats

@@ -19,9 +19,11 @@ import io.github.some_example_name.weapon.range.Vector;
 import io.github.some_example_name.weapon.range.Winchester;
 import io.github.some_example_name.ScoreManager;
 import io.github.some_example_name.Settings;
+import io.github.some_example_name.Spawn;
 import io.github.some_example_name.AssetLoader;
 import io.github.some_example_name.character.Player;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import io.github.some_example_name.MessageManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,24 +35,25 @@ public class WeaponManager {
     private BitmapFont font;
     private Weapon weaponToBuy;
     private boolean isBuying;
-    private String message; // Message to display
     private GlyphLayout layout;
     private Pap pap;
+    private Spawn spawnManager;
+    private MessageManager messageManager;
 
-    public WeaponManager(TiledMap tiledMap, Player player, float unitScale) {
+    public WeaponManager(TiledMap tiledMap, Player player, float unitScale, Spawn spawnManager) {
         this.weapons = new ArrayList<>();
         this.unitScale = unitScale;
         this.player = player;
         this.font = new BitmapFont();
         this.weaponToBuy = null;
         this.isBuying = false;
-        this.message = ""; // Initialize message
         this.layout = new GlyphLayout();
+        this.spawnManager = spawnManager;
+        this.messageManager = new MessageManager(player);
 
         // Initialize weapon spawns
         initializeWeaponSpawns(tiledMap);
-        // Initialize pap spawns
-        initializePapSpawns(tiledMap);
+
     }
 
     private void initializeWeaponSpawns(TiledMap tiledMap) {
@@ -91,14 +94,16 @@ public class WeaponManager {
     }
 
     private void initializePapSpawns(TiledMap tiledMap) {
-        for (MapObject papSpawn : tiledMap.getLayers().get("pap_interactions").getObjects()) {
-            if (papSpawn instanceof RectangleMapObject) {
-                String name = papSpawn.getName();
-                if ("pap".equalsIgnoreCase(name)) {
-                    Rectangle rect = ((RectangleMapObject) papSpawn).getRectangle();
-                    float x = rect.x * unitScale;
-                    float y = rect.y * unitScale;
-                    pap = new Pap(x, y);
+        if (spawnManager.getCurrentRound() == 2) {
+            for (MapObject papSpawn : tiledMap.getLayers().get("pap_interactions").getObjects()) {
+                if (papSpawn instanceof RectangleMapObject) {
+                    String name = papSpawn.getName();
+                    if ("pap".equalsIgnoreCase(name)) {
+                        Rectangle rect = ((RectangleMapObject) papSpawn).getRectangle();
+                        float x = rect.x * unitScale;
+                        float y = rect.y * unitScale;
+                        pap = new Pap(x, y);
+                    }
                 }
             }
         }
@@ -109,32 +114,30 @@ public class WeaponManager {
             weapon.draw(batch);
         }
 
-        if (pap != null) {
-            pap.render(batch);
-        } else {
-            System.out.println("Pap is null");
-        }
+        if (pap != null) pap.render(batch);
 
         // Check for player proximity to weapon spawns and display message
         for (Weapon weapon : weapons) {
             if (isPlayerNearWeapon(weapon)) {
                 if (isBuying && weaponToBuy == weapon) {
-                    displayMessage(batch, "Appuyez sur E pour confirmer l'achat de " + weapon.getName(), weapon.getX(), weapon.getY());
+                    messageManager.displayMessage(batch, "Appuyez sur E pour confirmer l'achat de " + weapon.getName(), weapon.getX(), weapon.getY());
                 } else {
-                    displayMessage(batch, "Acheter", weapon.getX() + 250, weapon.getY() + 250);
+                    messageManager.displayMessage(batch, "Acheter", weapon.getX() + 250, weapon.getY() + 250);
                 }
             }
         }
 
         // Check for player proximity to pap and display message
         if (pap != null && isPlayerNearPap()) {
-            displayMessage(batch, "Voulez-vous améliorer votre " + player.getCurrentWeapon().getName() + " ?", pap.getBounds().x, pap.getBounds().y + pap.getBounds().height);
+            messageManager.displayMessage(batch, "Voulez-vous améliorer votre " + player.getCurrentWeapon().getName() + " ?", pap.getBounds().x, pap.getBounds().y + pap.getBounds().height);
         }
 
         // Display purchase message if any
-        if (!message.isEmpty()) {
-            displayMessage(batch, message, player.getX(), player.getY() + 50);
+        if (!messageManager.getMessage().isEmpty()) {
+            messageManager.displayMessage(batch, messageManager.getMessage(), player.getX(), player.getY() + 50);
         }
+
+        messageManager.render(batch);
     }
 
     public void update(float delta, OrthographicCamera camera) {
@@ -146,6 +149,11 @@ public class WeaponManager {
         if (Gdx.input.isKeyJustPressed(Keys.E)) {
             handleWeaponPurchase();
             handlePapInteraction();
+        }
+
+        // Initialize pap spawns if the current round is 2
+        if (spawnManager.getCurrentRound() == 2 && pap == null) {
+            initializePapSpawns(spawnManager.getTiledMap());
         }
     }
 
@@ -179,7 +187,7 @@ public class WeaponManager {
                         isBuying = false;
                         weaponToBuy = null;
                     } else {
-                        message = "Points insuffisants pour " + weapon.getName();
+                        messageManager.setMessage("Points insuffisants pour " + weapon.getName());
                         isBuying = false;
                         weaponToBuy = null;
                     }
@@ -215,9 +223,9 @@ public class WeaponManager {
             if (ScoreManager.getInstance().getScore() >= upgradeCost) {
                 ScoreManager.getInstance().addPoints(-upgradeCost);
                 upgradeWeapon(currentWeapon);
-                message = "";
+                messageManager.setMessage("");
             } else {
-                message = "";
+                messageManager.setMessage("");
             }
         }
     }

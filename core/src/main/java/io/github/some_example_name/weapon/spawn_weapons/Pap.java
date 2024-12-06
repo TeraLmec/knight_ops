@@ -8,13 +8,14 @@ import io.github.some_example_name.AssetLoader;
 public class Pap {
     private Texture texture;
     private Rectangle bounds;
+    private int size = 300;
 
     public Pap(float x, float y) {
         this.texture = AssetLoader.getTexture("pap");
         if (this.texture == null) {
             throw new IllegalArgumentException("Texture not found: pap");
         }
-        this.bounds = new Rectangle(x, y, 200, 200);
+        this.bounds = new Rectangle(x - size / 2, y - size / 2, size, size);
     }
 
     public void render(SpriteBatch batch) {

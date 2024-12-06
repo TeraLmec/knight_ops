@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import io.github.some_example_name.Hitbox;
+import io.github.some_example_name.MessageManager;
 
 public abstract class Enemy extends Character {
     private int dmg;
@@ -43,17 +44,22 @@ public abstract class Enemy extends Character {
     private float knockbackTime = 0;
     private int xpReward;
     private long playerInRangeStartTime = -1;
+    private boolean attackTriggered = false;
+    private long attackTriggerTime = 0;
+    private MessageManager messageManager;
        
     public Enemy(Player player, float x, float y, Texture walkTexture, Texture attackTexture, Texture hurtTexture, Texture deathTexture, int attackFrameCols, int hurtFrameCols, int deathFrameCols, int hp, int[] speed, float range, int dmg, long attackCooldown, int points, int xpReward) {
         super(8, x, y, hp, getRandomSpeed(speed), walkTexture);
         initialize(dmg, range, attackCooldown, player, attackTexture, attackFrameCols, hurtTexture, hurtFrameCols, deathTexture, deathFrameCols, points);
         this.xpReward = xpReward;
+        this.messageManager = new MessageManager(player);
     }
 
     public Enemy(int walkFrameCols, Player player, float x, float y, Texture walkTexture, Texture attackTexture, Texture hurtTexture, Texture deathTexture, int attackFrameCols, int hurtFrameCols, int deathFrameCols, int hp, int[] speed, float range, int dmg, long attackCooldown, int points,int xpReward) {
         super(walkFrameCols, x, y, hp, getRandomSpeed(speed), walkTexture);
         initialize(dmg, range, attackCooldown, player, attackTexture, attackFrameCols, hurtTexture, hurtFrameCols, deathTexture, deathFrameCols, points);
         this.xpReward = xpReward;
+        this.messageManager = new MessageManager(player);
     }
 
     private void initialize(int dmg, float range, long attackCooldown, Player player, Texture attackTexture, int attackFrameCols, Texture hurtTexture, int hurtFrameCols, Texture deathTexture, int deathFrameCols, int points) {
@@ -128,20 +134,27 @@ public abstract class Enemy extends Character {
         long currentTime = TimeUtils.millis();
         float distanceToPlayer = calculateDistanceToPlayer();
         if (distanceToPlayer <= range) {
-            if (playerInRangeStartTime == -1) {
-                playerInRangeStartTime = currentTime;
-                attackCurrentSpriteIndex = 0;
+            if (!attackTriggered && currentTime - lastAttackTime >= attackCooldown) {
+                attackTriggered = true;
+                attackTriggerTime = currentTime;
                 attacking = true;
                 setStateTime(0f);
             }
-            if (currentTime - playerInRangeStartTime >= 500) {
-                if (currentTime - lastAttackTime >= attackCooldown && player.getHp() > 0) {
-                    player.takeDamage(this.dmg);
-                    lastAttackTime = currentTime;
-                }
+        }
+    }
+
+    private void checkDodge() {
+        long currentTime = TimeUtils.millis();
+        float distanceToPlayer = calculateDistanceToPlayer();
+        if (attackTriggered && currentTime - attackTriggerTime >= 500) {
+            if (distanceToPlayer <= range) {
+                player.takeDamage(this.dmg);
+                lastAttackTime = currentTime;
+            } else {
+                System.out.println("DODGE");
+                messageManager.setMessage("DODGED!");
             }
-        } else {
-            playerInRangeStartTime = -1;
+            attackTriggered = false;
         }
     }
 
@@ -193,6 +206,8 @@ public abstract class Enemy extends Character {
             move(deltaTime);
         }
         updateAnimation(deltaTime);
+        attack(); // Ensure attack logic is checked every frame
+        checkDodge(); // Ensure dodge logic is checked every frame
     }
 
     @Override
@@ -202,6 +217,7 @@ public abstract class Enemy extends Character {
         drawCurrentFrame(batch, currentFrame);
         drawHealthBar(batch);
         renderHitbox(batch);
+        messageManager.render(batch); // Render messages
     }
 
     @Override
