@@ -36,7 +36,7 @@ import java.util.Random;
 public class Player extends Character implements InputProcessor {
     // Player state variables
     private boolean dashing = false;
-    private float dashMultiplier = Settings.DASH_MULTIPLIER;
+    private float dashMultiplier = 1;
     private long dashStartTime;
     private long dashDuration = Settings.DASH_DURATION;
     private int meleeDamage = Settings.MELEE_DAMAGE;
@@ -67,13 +67,13 @@ public class Player extends Character implements InputProcessor {
     // Animation and rendering
     private Animation<TextureRegion> meleeAnimation;
     private Animation<TextureRegion> deathAnimation; // Ajoutez cette ligne
-    private Animation<TextureRegion> smokeAnimation; // Add this line
+    private Animation<TextureRegion> smokeAnimation;
     private ShapeRenderer shapeRenderer = new ShapeRenderer(); 
     private Rectangle meleeHitbox = new Rectangle();
     private float hitboxRotation = 0;
     private float width;
     private float height;
-    /* private List<Smoke> smokes = new ArrayList<>(); // Add this line */
+    /* private List<Smoke> smokes = new ArrayList<>(); */
 
     // Enemies
     private List<Enemy> enemies;
@@ -205,6 +205,7 @@ public class Player extends Character implements InputProcessor {
     private void startDash() {
         dashStartTime = TimeUtils.millis();
         dashing = true;
+        dashMultiplier = Settings.DASH_MULTIPLIER;
         /* smokes.add(new Smoke(position.cpy())); // Add smoke at the start of the dash */
     }
 

@@ -3,7 +3,6 @@ package io.github.some_example_name.weapon;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -11,16 +10,13 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Intersector;
-
 import io.github.some_example_name.FirstScreen;
-import io.github.some_example_name.ScoreManager;
 import io.github.some_example_name.character.Player;
 import io.github.some_example_name.weapon.bullets.PapAmmo;
 import io.github.some_example_name.weapon.bullets.PistolAmmo;
 import io.github.some_example_name.weapon.bullets.ShotgunAmmo;
 import io.github.some_example_name.weapon.range.Bmg;
 import io.github.some_example_name.weapon.range.Winchester;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +29,7 @@ public abstract class Weapon extends Sprite {
     private Player player;
     private String name;
     private int damage;
-    private Texture weaponTexture; // Add this line
+    private Texture weaponTexture;
     private float stateTime = 0f;
     private Vector2 position;
     private Vector2 direction;
@@ -65,7 +61,7 @@ public abstract class Weapon extends Sprite {
         this.volume = Settings.SHOOT_VOLUME; // Use volume from Settings
         this.fireRate = fireRate;
         this.ballSpeed = ballSpeed;
-        this.weaponCost = weaponCost; // Add this line
+        this.weaponCost = weaponCost;
     }
 
     public void update(float delta, OrthographicCamera camera, List<Enemy> enemies) {
@@ -121,7 +117,7 @@ public abstract class Weapon extends Sprite {
         while (iterator.hasNext()) {
             Ball ball = iterator.next();
             ball.update(delta, enemies, iterator);
-            ball.checkCollisions(enemies, iterator, damage, explosions); // Add this line
+            ball.checkCollisions(enemies, iterator, damage, explosions);
             if (ball.isOutOfBounds(FirstScreen.getTiledMapWidth(), FirstScreen.getTiledMapHeight())) {
                 iterator.remove();
             }

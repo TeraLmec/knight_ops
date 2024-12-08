@@ -21,7 +21,7 @@ public class Settings {
 
     // Player constants
     public static final long DASH_DURATION = 750;
-    public static final float DASH_MULTIPLIER = 3.1f;
+    public static final float DASH_MULTIPLIER = 3.4f;
     public static final int MELEE_DAMAGE = 50;
     public static final long MELEE_COOLDOWN = 1750;
     public static final float KNOCKBACK_DISTANCE = 100f;
@@ -51,20 +51,20 @@ public class Settings {
     public static final float MAX_PITCH = 1.15f;
 
     // Volume settings
-    public static final float SHOOT_VOLUME = 0.75f;
+    public static final float SHOOT_VOLUME = 0.7f;
     public static final float HIT_VOLUME = 0.35f;
-    public static final float MELEE_NORMAL_VOLUME = 0.35f;
-    public static final float MELEE_TOUCHED_VOLUME = 0.35f;
-    public static final float BUTTON_CLICK_VOLUME = 0.5f;
-    public static final float MUSIC_VOLUME = 0.75f;
-    public static final float PAP_JINGLE_VOLUME = 0.8f;
-    public static final float DODGED_VOLUME = 0.5f;
-    public static final float ENEMY_DAMAGE_VOLUME = 0.5f;
-    public static final float PLAYER_DEATH_VOLUME = 0.7f;
-    public static final float PAP_DONE_VOLUME = 0.8f;
+    public static final float MELEE_NORMAL_VOLUME = 0.3f;
+    public static final float MELEE_TOUCHED_VOLUME = 0.3f;
+    public static final float BUTTON_CLICK_VOLUME = 0.7f;
+    public static final float MUSIC_VOLUME = 0.8f;
+    public static final float PAP_JINGLE_VOLUME = 0.7f;
+    public static final float DODGED_VOLUME = 0.75f;
+    public static final float ENEMY_DAMAGE_VOLUME = 0.6f;
+    public static final float PLAYER_DEATH_VOLUME = 1f;
+    public static final float PAP_DONE_VOLUME = 0.9f;
     public static final float PAP_DENY_VOLUME = 0.8f;
-    public static final float BUTTON_HOVER_VOLUME = 0.5f;
-    public static final float NEW_ROUND_VOLUME = 0.8f;
+    public static final float BUTTON_HOVER_VOLUME = 0.35f;
+    public static final float NEW_ROUND_VOLUME = 0.75f;
     public static final float GUN_PURCHASE_VOLUME = 0.8f;
 
     // Weapon costs
@@ -87,7 +87,7 @@ public class Settings {
         Map<String, Object> armoredAxemanStats = new HashMap<>();
         armoredAxemanStats.put("hp", 250);
         armoredAxemanStats.put("range", 80f);
-        armoredAxemanStats.put("speedRange", new int[]{350, 600});
+        armoredAxemanStats.put("speedRange", new int[]{550, 650});
         armoredAxemanStats.put("dmg", 45);
         armoredAxemanStats.put("attackCooldown", 1500L);
         armoredAxemanStats.put("points", 35);
@@ -99,7 +99,7 @@ public class Settings {
         Map<String, Object> armoredOrcStats = new HashMap<>();
         armoredOrcStats.put("hp", 190);
         armoredOrcStats.put("range", 90f);
-        armoredOrcStats.put("speedRange", new int[]{400, 600});
+        armoredOrcStats.put("speedRange", new int[]{550, 650});
         armoredOrcStats.put("dmg", 55);
         armoredOrcStats.put("attackCooldown", 1300L);
         armoredOrcStats.put("points", 35);
@@ -111,7 +111,7 @@ public class Settings {
         Map<String, Object> armoredSkeletonStats = new HashMap<>();
         armoredSkeletonStats.put("hp", 175);
         armoredSkeletonStats.put("range", 120f);
-        armoredSkeletonStats.put("speedRange", new int[]{400, 600});
+        armoredSkeletonStats.put("speedRange", new int[]{550, 650});
         armoredSkeletonStats.put("dmg", 55);
         armoredSkeletonStats.put("attackCooldown", 1000L);
         armoredSkeletonStats.put("points", 35);
@@ -123,7 +123,7 @@ public class Settings {
         Map<String, Object> eliteOrcStats = new HashMap<>();
         eliteOrcStats.put("hp", 300);
         eliteOrcStats.put("range", 150f);
-        eliteOrcStats.put("speedRange", new int[]{400, 650});
+        eliteOrcStats.put("speedRange", new int[]{550, 700});
         eliteOrcStats.put("dmg", 60);
         eliteOrcStats.put("attackCooldown", 750L);
         eliteOrcStats.put("points", 30);
@@ -135,7 +135,7 @@ public class Settings {
         Map<String, Object> greatSwordSkeletonStats = new HashMap<>();
         greatSwordSkeletonStats.put("hp", 120);
         greatSwordSkeletonStats.put("range", 150f);
-        greatSwordSkeletonStats.put("speedRange", new int[]{350, 650});
+        greatSwordSkeletonStats.put("speedRange", new int[]{550, 650});
         greatSwordSkeletonStats.put("dmg", 75);
         greatSwordSkeletonStats.put("attackCooldown", 1500L);
         greatSwordSkeletonStats.put("points", 40);
@@ -159,7 +159,7 @@ public class Settings {
         Map<String, Object> orcRiderStats = new HashMap<>();
         orcRiderStats.put("hp", 1200);
         orcRiderStats.put("range", 65f);
-        orcRiderStats.put("speedRange", new int[]{450, 650});
+        orcRiderStats.put("speedRange", new int[]{500, 650});
         orcRiderStats.put("dmg", 90);
         orcRiderStats.put("attackCooldown", 2500L);
         orcRiderStats.put("points", 500);
@@ -171,7 +171,7 @@ public class Settings {
         Map<String, Object> orcStats = new HashMap<>();
         orcStats.put("hp", 110);
         orcStats.put("range", 100f);
-        orcStats.put("speedRange", new int[]{350, 600});
+        orcStats.put("speedRange", new int[]{500, 600});
         orcStats.put("dmg", 50);
         orcStats.put("attackCooldown", 750L);
         orcStats.put("points", 20);
@@ -183,7 +183,7 @@ public class Settings {
         Map<String, Object> skeletonStats = new HashMap<>();
         skeletonStats.put("hp", 100);
         skeletonStats.put("range", 90f);
-        skeletonStats.put("speedRange", new int[]{400, 600});
+        skeletonStats.put("speedRange", new int[]{500, 600});
         skeletonStats.put("dmg", 35);
         skeletonStats.put("attackCooldown", 600L);
         skeletonStats.put("points", 15);
@@ -195,7 +195,7 @@ public class Settings {
         Map<String, Object> slimeStats = new HashMap<>();
         slimeStats.put("hp", 200);
         slimeStats.put("range", 150f);
-        slimeStats.put("speedRange", new int[]{350, 600});
+        slimeStats.put("speedRange", new int[]{500, 650});
         slimeStats.put("dmg", 25);
         slimeStats.put("attackCooldown", 1000L);
         slimeStats.put("points", 10);
@@ -219,7 +219,7 @@ public class Settings {
         Map<String, Object> wereWolfStats = new HashMap<>();
         wereWolfStats.put("hp", 1500);
         wereWolfStats.put("range", 110f);
-        wereWolfStats.put("speedRange", new int[]{300, 600});
+        wereWolfStats.put("speedRange", new int[]{600, 750});
         wereWolfStats.put("dmg", 110);
         wereWolfStats.put("attackCooldown", 900L);
         wereWolfStats.put("points", 500);
@@ -231,7 +231,7 @@ public class Settings {
         Map<String, Object> wizardStats = new HashMap<>();
         wizardStats.put("hp", 90);
         wizardStats.put("range", 150f);
-        wizardStats.put("speedRange", new int[]{450, 650});
+        wizardStats.put("speedRange", new int[]{600, 750});
         wizardStats.put("dmg", 60);
         wizardStats.put("attackCooldown", 1000L);
         wizardStats.put("points", 30);
@@ -248,7 +248,7 @@ public class Settings {
         Map<String, Object> mauserStats = new HashMap<>();
         mauserStats.put("name", "Mauser");
         mauserStats.put("texture", AssetLoader.getTexture("mauser_normal"));
-        mauserStats.put("damage", 35);
+        mauserStats.put("damage", /* 24 */150);
         mauserStats.put("fireRate", 0.275f);
         mauserStats.put("ballSpeed", 3500f);
         WEAPON_STATS.put("mauser", mauserStats);
@@ -275,8 +275,8 @@ public class Settings {
         Map<String, Object> bmgStats = new HashMap<>();
         bmgStats.put("name", "BMG");
         bmgStats.put("texture", AssetLoader.getTexture("bmg_normal"));
-        bmgStats.put("damage", 200);
-        bmgStats.put("fireRate", 2.5f);
+        bmgStats.put("damage", 110);
+        bmgStats.put("fireRate", 2.8f);
         WEAPON_STATS.put("bmg", bmgStats);
 
         // AR stats
@@ -340,6 +340,6 @@ public class Settings {
     public static final float SCORE_TEXT_X = -250;
     public static final float SCORE_TEXT_Y = 20;
 
-    public static final boolean SHOW_HITBOXES = false;
-    public static final boolean SHOW_MELEE_HITBOX = false;
+    public static final boolean SHOW_HITBOXES = true;
+    public static final boolean SHOW_MELEE_HITBOX = true;
 }

@@ -5,7 +5,7 @@ public class ScoreManager {
     private int score;
 
     private ScoreManager() {
-        score = 500;
+        score = 500000;
     }
 
     public static ScoreManager getInstance() {

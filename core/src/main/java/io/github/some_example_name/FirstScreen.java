@@ -14,8 +14,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
-import io.github.some_example_name.Settings;
-import io.github.some_example_name.MessageManager;
 
 public class FirstScreen implements Screen {
     private SpriteBatch batch;

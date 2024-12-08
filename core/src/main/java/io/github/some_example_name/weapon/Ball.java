@@ -106,7 +106,7 @@ public class Ball extends Sprite {
             Enemy enemy = enemyIterator.next();
             enemy.updateBoundingRectangle(); // Ensure bounding rectangle is updated
             if (getBoundingRectangle().overlaps(enemy.getBoundingRectangle())) {
-                ScoreManager.getInstance().addPoints(1);
+                ScoreManager.getInstance().addPoints(3);
                 ballIterator.remove();
                 enemy.takeDamage(damage); // Use existing method to reduce enemy health
                 explosions.add(new Explosion(getPosition(), getExplosionAnimation())); // Add explosion

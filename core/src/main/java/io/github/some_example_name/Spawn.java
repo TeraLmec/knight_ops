@@ -35,7 +35,8 @@ public class Spawn {
     private static final float ROUND_INTERVAL = Settings.ROUND_INTERVAL;
     private int totalEnemiesToSpawn;
     private TiledMap tiledMap;
-    private static final float MIN_SPAWN_INTERVAL = 0.2f; // Add this line
+    private static final float MIN_SPAWN_INTERVAL = 0.4f;
+    private boolean bossSpawned = false;
 
     public Spawn(TiledMap tiledMap, float unitScale) {
         this.tiledMap = tiledMap;
@@ -110,12 +111,12 @@ public class Spawn {
         totalEnemiesToSpawn = enemiesToSpawn = 10 + (currentRound - 1) * 5;
         spawnTimer = 0;
         roundInProgress = true;
-
-        // Spawn a boss every 3 rounds
-        if (currentRound % 3 == 0) {
-            spawnBoss();
-            totalEnemiesToSpawn++; // Include the boss in the total enemies to spawn
-        }
+        bossSpawned = false; // Reset boss spawn flag
+/* 
+        // Play new round sound
+        Sound newRoundSound = AssetLoader.getSound("new_round");
+        float pitch = Settings.MIN_PITCH + random.nextFloat() * (Settings.MAX_PITCH - Settings.MIN_PITCH);
+        newRoundSound.play(Settings.NEW_ROUND_VOLUME, pitch, 0); */
     }
 
     private void spawnBoss() {
@@ -156,7 +157,7 @@ public class Spawn {
     private void spawnNewEnemies(float delta) {
         if (enemiesToSpawn > 0) {
             spawnTimer += delta;
-            float currentSpawnInterval = Math.max(Settings.SPAWN_INTERVAL - (currentRound - 1) * 0.2f, MIN_SPAWN_INTERVAL); // Change this line
+            float currentSpawnInterval = Math.max(Settings.SPAWN_INTERVAL - (currentRound - 1) * 0.05f, MIN_SPAWN_INTERVAL);
             if (spawnTimer >= currentSpawnInterval) {
                 spawnTimer = 0;
                 if (!enemySpawns.isEmpty()) {
@@ -168,6 +169,15 @@ public class Spawn {
                     if (isFarFromPlayer(enemyX, enemyY)) {
                         enemies.add(createRandomEnemy(enemyX, enemyY));
                         enemiesToSpawn--;
+
+                        // Check if it's a boss round and boss hasn't spawned yet
+                        if (currentRound % 3 == 0 && !bossSpawned) {
+                            float remainingPercentage = (float) enemiesToSpawn / totalEnemiesToSpawn;
+                            if (random.nextFloat() <= remainingPercentage) {
+                                spawnBoss();
+                                bossSpawned = true; // Set boss spawn flag
+                            }
+                        }
                     }
                 }
             }

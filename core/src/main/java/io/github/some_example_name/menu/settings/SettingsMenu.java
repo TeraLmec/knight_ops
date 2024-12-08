@@ -37,7 +37,7 @@ public class SettingsMenu {
     private static final String PREFS_NAME = "settings";
     private static final String RESOLUTION_KEY = "resolution";
     private Runnable onResolutionChange;
-    private long lastHoverTime = 0; // Add this line
+    private long lastHoverTime = 0;
 
     public SettingsMenu(PauseMenu pauseMenu, StartMenu startMenu) {
         this.pauseMenu = pauseMenu;
@@ -49,7 +49,7 @@ public class SettingsMenu {
         table.setFillParent(true);
         stage.addActor(table);
 
-        Sound buttonHoverSound = AssetLoader.getSound("button_hover"); // Add this line
+        Sound buttonHoverSound = AssetLoader.getSound("button_hover");
 
         InputListener hoverListener = new InputListener() {
             @Override
